@@ -9,13 +9,14 @@ import 'movie_base.dart';
 
 class MovieDataService implements MovieBase {
 
-  static const baseUrl = "http://www.omdbapi.com/?t=";
+//  static const baseUrl = "http://www.omdbapi.com/?i=tt3896198&apikey=52fb3639?t=";
+  static const baseUrl = "http://www.omdbapi.com/?i=tt3896198&apikey=52fb3639";
   final http.Client httpClient = http.Client();
 
   @override
   Future<Movie> getMovie(String movieName) async {
-    movieName = "Matrix";
-    final response = await httpClient.get(baseUrl + movieName);
+    //final response = await httpClient.get(baseUrl + movieName);
+    final response = await httpClient.get(baseUrl);
 
     if(response.statusCode != 200){
       throw Exception("Exception Data getirilemedi");

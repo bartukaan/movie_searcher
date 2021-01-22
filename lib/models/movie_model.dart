@@ -118,6 +118,11 @@ class Movie {
     "Website": website == null ? null : website,
     "Response": response == null ? null : response,
   };
+
+  @override
+  String toString() {
+    return 'Movie{title: $title, year: $year, rated: $rated, released: $released, runtime: $runtime, genre: $genre, director: $director, writer: $writer, actors: $actors, plot: $plot, language: $language, country: $country, awards: $awards, poster: $poster, ratings: $ratings, metascore: $metascore, imdbRating: $imdbRating, imdbVotes: $imdbVotes, imdbId: $imdbId, type: $type, dvd: $dvd, boxOffice: $boxOffice, production: $production, website: $website, response: $response}';
+  }
 }
 
 class Rating {
@@ -138,4 +143,9 @@ class Rating {
     "Source": source == null ? null : source,
     "Value": value == null ? null : value,
   };
+
+  @override
+  String toString() {
+    return 'Rating{source: $source, value: $value}';
+  }
 }

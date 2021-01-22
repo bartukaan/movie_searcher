@@ -4,7 +4,7 @@ abstract class MovieState extends Equatable {
   const MovieState();
 }
 
-class MovieInitial extends MovieState {
+class MovieInitialState extends MovieState {
   @override
   List<Object> get props => [];
 }
@@ -22,6 +22,10 @@ class MovieLoadedState extends MovieState{
 }
 
 class MovieErrorState extends MovieState{
+  final errorText;
+
+  MovieErrorState({@required this.errorText});
+
   @override
-  List<Object> get props => throw UnimplementedError();
+  List<Object> get props => [this.errorText];
 }

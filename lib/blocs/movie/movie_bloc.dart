@@ -15,20 +15,20 @@ part 'movie_state.dart';
 class MovieBloc extends Bloc<MovieEvent, MovieState> {
   final MovieRepository movieRepository = getIt<MovieRepository>();
 
-  MovieBloc() : super(MovieInitial());
+  MovieBloc() : super(MovieInitialState());
 
   @override
-  MovieState get initialState => MovieInitial();
+  MovieState get initialState => MovieInitialState();
 
   @override
   Stream<MovieState> mapEventToState(MovieEvent event) async* {
     if (event is FetchMovieEvent) {
       yield MovieLoadingState();
       try {
-        final Movie findingmovie = await movieRepository.getMovie(event.movieName);
-        yield MovieLoadedState(movie: findingmovie);
+        final Movie movie = await movieRepository.getMovie(event.movieName);
+        yield MovieLoadedState(movie: movie);
       } catch (e) {
-        yield MovieErrorState();
+        yield MovieErrorState(errorText: e.toString());
       }
     }
   }

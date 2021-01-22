@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'blocs/movie/movie_bloc.dart';
+import 'models/movie_model.dart';
 
 
 class MoviePage extends StatefulWidget {
@@ -18,23 +22,27 @@ class _MoviePageState extends State<MoviePage> {
 
   @override
   void initState() {
-
-    for(int count = 0; count < 50; count++)
-    {
+    for (int count = 0; count < 50; count++) {
       itemList.add("Item $count");
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    // ignore: close_sinks
+    final _movieBloc = BlocProvider.of<MovieBloc>(context);
+
+    _movieBloc.add(FetchMovieEvent(movieName: "Matrix"));
+
     return Scaffold(
-      body: NestedScrollView(
+        body: NestedScrollView(
           headerSliverBuilder: (BuildContext context, bool innerBoxScrolled) {
             return <Widget>[
               createSilverAppBar()
             ];
           },
-          body: ListView.builder(
+          body: _buildBody(),)
+      /* ListView.builder(
               itemCount: itemList.length,
               itemBuilder: (context, index){
                 return Card(
@@ -42,7 +50,7 @@ class _MoviePageState extends State<MoviePage> {
                     title: Text(itemList[index]),
                   ),
                 );
-              })),
+              })),*/
     );
   }
 
@@ -70,12 +78,15 @@ class _MoviePageState extends State<MoviePage> {
       flexibleSpace: FlexibleSpaceBar(
           titlePadding: EdgeInsets.only(bottom: 15),
           centerTitle: true,
-          title:isSearchClicked ? Container(
+          title: isSearchClicked ? Container(
             padding: EdgeInsets.only(bottom: 2),
             //constraints:BoxConstraints(minHeight: 40, maxHeight: 40),
-            width: MediaQuery.of(context).size.width * 0.50,
+            width: MediaQuery
+                .of(context)
+                .size
+                .width * 0.50,
             child: Padding(
-              padding: const EdgeInsets.only(top:8.0),
+              padding: const EdgeInsets.only(top: 8.0),
               child: CupertinoTextField(
                 controller: _filter,
                 keyboardType: TextInputType.text,
@@ -88,7 +99,7 @@ class _MoviePageState extends State<MoviePage> {
                 prefix: Padding(
                   padding:
                   const EdgeInsets.fromLTRB(9.0, 6.0, 9.0, 6.0),
-                  child: Icon(Icons.search, ),
+                  child: Icon(Icons.search,),
                 ),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8.0),
@@ -100,14 +111,14 @@ class _MoviePageState extends State<MoviePage> {
               "Movie Searcher"
           ),
 
-          background: Image.network("https://miro.medium.com/max/3240/1*9-ujy3CCBhrpkvS7TMLcoQ.png", fit: BoxFit.cover,)
+          background: Image.network(
+            "https://miro.medium.com/max/3240/1*9-ujy3CCBhrpkvS7TMLcoQ.png",
+            fit: BoxFit.cover,)
       ),
     );
   }
 
   void _searchPressed() {
-
-    
     setState(() {
       if (this._searchIcon.icon == Icons.search) {
         this._searchIcon = Icon(
@@ -123,5 +134,62 @@ class _MoviePageState extends State<MoviePage> {
         _filter.clear();
       }
     });
+  }
+
+  _buildBody() {
+    // ignore: close_sinks
+    final _movieBloc = BlocProvider.of<MovieBloc>(context);
+
+    _movieBloc.add(FetchMovieEvent(movieName: "Matrix"));
+    return BlocBuilder(
+        cubit: _movieBloc,
+        builder: (context, state) {
+debugPrint("State: $state");
+          if (state is MovieInitialState) {
+            return Center(
+                child: Text("Initial")
+            );
+          }
+
+          if (state is MovieLoadingState) {
+            return Center(
+                child: Text("Loading")
+
+              /*Lottie.asset(
+              'assets/animations/loading_electricity.json',
+              repeat: true,*/
+            );
+          }
+
+          if (state is MovieErrorState) {
+            return Container();
+            /*     AlertDialog(
+                title: "Error",
+                content: state.errorText,
+                firstButtonText: "OK")
+                .goster(context);
+          );*/
+          }
+
+          if (state is MovieLoadedState) {
+            //var movieTitle = state.movie.title;
+            Movie movie = state.movie;
+            debugPrint(movie.toString());
+            return Container();
+            /*     final meterCardDataList = state.meterCardDataList;
+          print("Meter Screen => Getting Card Data List :" +
+              meterCardDataList.toString());
+          if (meterCardDataList.length > 0) {
+            return _meterCardList(meterCardDataList);*/
+          }
+
+
+          else {
+            return Container();
+          }
+        }
+
+
+    );
   }
 }
