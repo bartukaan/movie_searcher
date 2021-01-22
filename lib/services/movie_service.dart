@@ -13,7 +13,7 @@ class MovieDataService implements MovieBase {
 
   final http.Client httpClient = http.Client();
 
-  @override
+/*  @override
   Future<Movie> getMovie(String movieName) async {
     final response = await httpClient.get(baseUrl + movieName);
 
@@ -23,7 +23,7 @@ class MovieDataService implements MovieBase {
     final responseJSON = jsonDecode(response.body);
     debugPrint(responseJSON.toString());
     return Movie.fromJson(responseJSON);
-  }
+  }*/
 
   @override
   Future<List<Movie>> getMovies(String movieName) async {

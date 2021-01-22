@@ -6,7 +6,7 @@ abstract class MovieBase {
 
  // Future<List<Movie>> getInitialMovies();
 
-  Future<Movie> getMovie(String movieName);
+/*  Future<Movie> getMovie(String movieName);*/
 
   Future<List<Movie>> getMovies(String movieName);
 

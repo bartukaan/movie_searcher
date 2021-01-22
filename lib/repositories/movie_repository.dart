@@ -8,10 +8,10 @@ import '../locator.dart';
 class MovieRepository {
 
   MovieDataService movieDataService = getIt<MovieDataService>();
-
+/*
   Future<Movie> getMovie(String movieName) async {
     return await movieDataService.getMovie(movieName);
-}
+}*/
 
  Future<List<Movie>> getMovies(String movieName) async {
     return await movieDataService.getMovies(movieName);
