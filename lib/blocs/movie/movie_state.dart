@@ -13,12 +13,12 @@ class MovieLoadingState extends MovieState{
   List<Object> get props => [];
 }
 class MovieLoadedState extends MovieState{
-  final Movie movie;
+  final List<Movie> movieList;
 
-  MovieLoadedState({@required this.movie});
+  MovieLoadedState({@required this.movieList});
 
   @override
-  List<Object> get props => [this.movie];
+  List<Object> get props => [this.movieList];
 }
 
 class MovieErrorState extends MovieState{
