@@ -8,11 +8,11 @@ class MovieInitial extends MovieState {
   @override
   List<Object> get props => [];
 }
-class MovieLoadingState extends MovieEvent{
+class MovieLoadingState extends MovieState{
   @override
   List<Object> get props => [];
 }
-class MovieLoadedState extends MovieEvent{
+class MovieLoadedState extends MovieState{
   final Movie movie;
 
   MovieLoadedState({@required this.movie});
@@ -21,7 +21,7 @@ class MovieLoadedState extends MovieEvent{
   List<Object> get props => [this.movie];
 }
 
-class MovieErrorState extends MovieEvent{
+class MovieErrorState extends MovieState{
   @override
   List<Object> get props => throw UnimplementedError();
 }

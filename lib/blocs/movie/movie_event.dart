@@ -10,5 +10,5 @@ class FetchMovieEvent extends MovieEvent {
   FetchMovieEvent({@required this.movieName});
 
   @override
-  List<Object> get props => throw UnimplementedError();
+  List<Object> get props => [this.movieName];
 }

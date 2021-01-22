@@ -9,7 +9,7 @@ class MovieRepository {
 
   MovieDataService movieDataService = getIt<MovieDataService>();
 
-  Future<bool> getMovie(String movieName) async {
+  Future<Movie> getMovie(String movieName) async {
     return await movieDataService.getMovie(movieName);
 }
 

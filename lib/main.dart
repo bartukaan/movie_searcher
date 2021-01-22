@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movie_app/locator.dart';
 
-import 'home.dart';
+import 'blocs/movie/movie_bloc.dart';
+import 'movie.dart';
 
 void main() {
   setupLocator();
@@ -19,7 +21,9 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: HomePage(),
+      home: BlocProvider<MovieBloc>(
+          create: (context)=> MovieBloc(),
+          child: MoviePage()),
     );
   }
 }

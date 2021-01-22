@@ -25,7 +25,8 @@ dependencies:
     sdk: flutter
   http: ^0.12.2
   path_provider: ^1.6.24
-  bloc: ^6.1.1
+  flutter_bloc: ^6.1.1
+  provider: ^4.3.2+2
   equatable: ^1.2.5
   get_it: ^5.0.1
 
