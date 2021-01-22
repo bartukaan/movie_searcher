@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movie_app/locator.dart';
 
 import 'blocs/movie/movie_bloc.dart';
-import 'movie.dart';
+import 'screens/movie_screen.dart';
 
 void main() {
   setupLocator();

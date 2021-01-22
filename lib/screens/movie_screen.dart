@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'blocs/movie/movie_bloc.dart';
-import 'models/movie_model.dart';
+import '../blocs/movie/movie_bloc.dart';
+import '../models/movie_model.dart';
 
 class MoviePage extends StatefulWidget {
   @override
@@ -139,6 +139,7 @@ class _MoviePageState extends State<MoviePage> {
         builder: (context, state) {
           debugPrint("State: $state");
           if (state is MovieInitialState) {
+          //  return Center(child: Text("Initial"));
             return Center(child: Text("Initial"));
           }
 
@@ -152,7 +153,7 @@ class _MoviePageState extends State<MoviePage> {
           }
 
           if (state is MovieErrorState) {
-            return Container();
+            return Container(child: Text(state.errorText),);
             /*     AlertDialog(
                 title: "Error",
                 content: state.errorText,
