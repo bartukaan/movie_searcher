@@ -1,4 +1,3 @@
-
 // To parse this JSON data, do
 //
 //     final welcome = welcomeFromJson(jsonString);
@@ -21,27 +20,31 @@ class Welcome {
   String response;
 
   factory Welcome.fromJson(Map<String, dynamic> json) => Welcome(
-    search: json["Search"] == null ? null : List<Movie>.from(json["Search"].map((x) => Movie.fromJson(x))),
-    totalResults: json["totalResults"] == null ? null : json["totalResults"],
-    response: json["Response"] == null ? null : json["Response"],
-  );
+        search: json["Search"] == null
+            ? null
+            : List<Movie>.from(json["Search"].map((x) => Movie.fromJson(x))),
+        totalResults:
+            json["totalResults"] == null ? null : json["totalResults"],
+        response: json["Response"] == null ? null : json["Response"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "Search": search == null ? null : List<dynamic>.from(search.map((x) => x.toJson())),
-    "totalResults": totalResults == null ? null : totalResults,
-    "Response": response == null ? null : response,
-  };
+        "Search": search == null
+            ? null
+            : List<dynamic>.from(search.map((x) => x.toJson())),
+        "totalResults": totalResults == null ? null : totalResults,
+        "Response": response == null ? null : response,
+      };
 }
 
 class Movie {
-  Movie({
-    this.title,
-    this.year,
-    this.imdbId,
-    this.type,
-    this.poster,
-    this.isFavorite=false
-  });
+  Movie(
+      {this.title,
+      this.year,
+      this.imdbId,
+      this.type,
+      this.poster,
+      this.isFavorite = false});
 
   String title;
   String year;
@@ -51,28 +54,25 @@ class Movie {
   bool isFavorite;
 
   factory Movie.fromJson(Map<String, dynamic> json) => Movie(
-    title: json["Title"] == null ? null : json["Title"],
-    year: json["Year"] == null ? null : json["Year"],
-    imdbId: json["imdbID"] == null ? null : json["imdbID"],
-    type: json["Type"] == null ? null : typeValues.map[json["Type"]],
-    poster: json["Poster"] == null ? null : json["Poster"],
-  );
+        title: json["Title"] == null ? null : json["Title"],
+        year: json["Year"] == null ? null : json["Year"],
+        imdbId: json["imdbID"] == null ? null : json["imdbID"],
+        type: json["Type"] == null ? null : typeValues.map[json["Type"]],
+        poster: json["Poster"] == null ? null : json["Poster"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "Title": title == null ? null : title,
-    "Year": year == null ? null : year,
-    "imdbID": imdbId == null ? null : imdbId,
-    "Type": type == null ? null : typeValues.reverse[type],
-    "Poster": poster == null ? null : poster,
-  };
+        "Title": title == null ? null : title,
+        "Year": year == null ? null : year,
+        "imdbID": imdbId == null ? null : imdbId,
+        "Type": type == null ? null : typeValues.reverse[type],
+        "Poster": poster == null ? null : poster,
+      };
 }
 
 enum Type { MOVIE, GAME }
 
-final typeValues = EnumValues({
-  "game": Type.GAME,
-  "movie": Type.MOVIE
-});
+final typeValues = EnumValues({"game": Type.GAME, "movie": Type.MOVIE});
 
 class EnumValues<T> {
   Map<String, T> map;
@@ -87,8 +87,6 @@ class EnumValues<T> {
     return reverseMap;
   }
 }
-
-
 
 /*
 // To parse this JSON data, do

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:movie_app/models/movie_model.dart';
-import 'package:movie_app/screens/movie_search.dart';
 import 'package:movie_app/screens/search_screen.dart';
 
 class FavoriteMovieList extends StatefulWidget {

@@ -5,22 +5,20 @@ import 'package:movie_app/screens/search_screen.dart';
 class MovieList extends StatefulWidget {
   final List<Movie> movieList;
 
-
   const MovieList({Key key, this.movieList}) : super(key: key);
+
   @override
   _MovieListState createState() => _MovieListState();
 }
 
 class _MovieListState extends State<MovieList> {
-
   @override
   Widget build(BuildContext context) {
-
     return GridView.builder(
       shrinkWrap: true,
       itemCount: widget.movieList.length,
       gridDelegate:
-      SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+          SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
       itemBuilder: (BuildContext context, int index) {
         return Padding(
           padding: const EdgeInsets.all(8.0),
@@ -30,44 +28,43 @@ class _MovieListState extends State<MovieList> {
             color: Colors.grey.shade300,
             child: Container(
               decoration:
-              BoxDecoration(borderRadius: BorderRadius.circular(20)),
+                  BoxDecoration(borderRadius: BorderRadius.circular(20)),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                widget.movieList[index].isFavorite
-                    ? FlatButton.icon(
-                        onPressed: () {
-                          SearchScreen.favoriteMovies
-                              .remove(widget.movieList[index]);
-                          setState(() {
-                            widget.movieList[index].isFavorite  = false;
-                          });
-
-                        },
-                        icon: Icon(
-                          Icons.favorite,
-                          color: Colors.red,
-                          size: 30,
-                        ),
-                        label: Text("Added to Favorites"),
-                      )
+                      widget.movieList[index].isFavorite
+                          ? FlatButton.icon(
+                              onPressed: () {
+                                SearchScreen.favoriteMovies
+                                    .remove(widget.movieList[index]);
+                                setState(() {
+                                  widget.movieList[index].isFavorite = false;
+                                });
+                              },
+                              icon: Icon(
+                                Icons.favorite,
+                                color: Colors.red,
+                                size: 30,
+                              ),
+                              label: Text("Added to Favorites"),
+                            )
                           : FlatButton.icon(
-                        onPressed: () {
-                          SearchScreen.favoriteMovies
-                              .add(widget.movieList[index]);
-                          setState(() {
-                            widget.movieList[index].isFavorite  = true;
-                          });
-                        },
-                        icon: Icon(
-                          Icons.favorite,
-                          size: 30,
-                        ),
-                        label: Text("Add Favorite"),
-                      ),
+                              onPressed: () {
+                                SearchScreen.favoriteMovies
+                                    .add(widget.movieList[index]);
+                                setState(() {
+                                  widget.movieList[index].isFavorite = true;
+                                });
+                              },
+                              icon: Icon(
+                                Icons.favorite,
+                                size: 30,
+                              ),
+                              label: Text("Add Favorite"),
+                            ),
                     ],
                   ),
                   Padding(

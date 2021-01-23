@@ -16,7 +16,6 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
-
   Bloc<MovieEvent, MovieState> movieBloc;
 
 //  static final List<Movie> favoriteMovies = [];
@@ -30,7 +29,7 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     // ignore: close_sinks
-     movieBloc = BlocProvider.of<MovieSearchBloc>(context);
+    movieBloc = BlocProvider.of<MovieSearchBloc>(context);
     return Scaffold(
       backgroundColor: Color(0xFF00385d),
       appBar: AppBar(
@@ -213,7 +212,7 @@ class _SearchScreenState extends State<SearchScreen> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Container(
-              width: MediaQuery.of(context).size.width * 0.9,
+                width: MediaQuery.of(context).size.width * 0.9,
                 decoration: BoxDecoration(
                   color: Colors.black12,
                   borderRadius: BorderRadius.circular(10.0),

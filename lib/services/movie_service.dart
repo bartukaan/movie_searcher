@@ -12,18 +12,6 @@ class MovieDataService implements MovieBase {
 
   final http.Client httpClient = http.Client();
 
-/*  @override
-  Future<Movie> getMovie(String movieName) async {
-    final response = await httpClient.get(baseUrl + movieName);
-
-    if (response.statusCode != 200) {
-      throw Exception("Exception Data getirilemedi");
-    }
-    final responseJSON = jsonDecode(response.body);
-    debugPrint(responseJSON.toString());
-    return Movie.fromJson(responseJSON);
-  }*/
-
   @override
   Future<List<Movie>> getMovies(String movieName) async {
     final response = await httpClient.get(baseUrl + movieName);
