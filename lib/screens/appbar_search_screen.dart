@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movie_app/blocs/movie/movie_search_bloc.dart';
 import 'package:movie_app/models/movie_model.dart';
 
-class MovieSearch extends SearchDelegate<String> {
+class AppBarSearchScreen extends SearchDelegate<String> {
   static final List<Movie> favoriteMovies = [];
   final recentSearchingMovies = [
     "Matrix",
@@ -19,7 +19,7 @@ class MovieSearch extends SearchDelegate<String> {
 
   final Bloc<MovieEvent, MovieState> movieBloc;
 
-  MovieSearch({@required this.movieBloc});
+  AppBarSearchScreen({@required this.movieBloc});
 
   @override
   List<Widget> buildActions(BuildContext context) {

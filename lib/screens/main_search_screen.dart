@@ -6,16 +6,16 @@ import 'package:movie_app/models/movie_model.dart';
 import 'package:movie_app/screens/favorite_movie_list.dart';
 import 'package:movie_app/widgets/movie_list_widget.dart';
 
-import 'movie_search.dart';
+import 'appbar_search_screen.dart';
 
-class SearchScreen extends StatefulWidget {
+class MainSearchScreen extends StatefulWidget {
   static final List<Movie> favoriteMovies = [];
 
   @override
-  _SearchScreenState createState() => _SearchScreenState();
+  _MainSearchScreenState createState() => _MainSearchScreenState();
 }
 
-class _SearchScreenState extends State<SearchScreen> {
+class _MainSearchScreenState extends State<MainSearchScreen> {
   Bloc<MovieEvent, MovieState> movieBloc;
 
 //  static final List<Movie> favoriteMovies = [];
@@ -53,7 +53,7 @@ class _SearchScreenState extends State<SearchScreen> {
             icon: Icon(Icons.search),
             onPressed: () => showSearch(
               context: context,
-              delegate: MovieSearch(
+              delegate: AppBarSearchScreen(
                   movieBloc: BlocProvider.of<MovieSearchBloc>(context)),
             ),
           ),
@@ -125,7 +125,7 @@ class _SearchScreenState extends State<SearchScreen> {
                       isAddedList
                           ? FlatButton.icon(
                               onPressed: () {
-                                SearchScreen.favoriteMovies
+                                MainSearchScreen.favoriteMovies
                                     .remove(movieList[index]);
                                 setState(() {
                                   isAddedList = !isAddedList;
@@ -140,7 +140,7 @@ class _SearchScreenState extends State<SearchScreen> {
                             )
                           : FlatButton.icon(
                               onPressed: () {
-                                SearchScreen.favoriteMovies
+                                MainSearchScreen.favoriteMovies
                                     .add(movieList[index]);
                                 setState(() {
                                   isAddedList = !isAddedList;

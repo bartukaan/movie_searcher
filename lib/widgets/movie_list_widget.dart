@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:movie_app/models/movie_model.dart';
-import 'package:movie_app/screens/search_screen.dart';
+import 'package:movie_app/screens/main_search_screen.dart';
 
 class MovieList extends StatefulWidget {
   final List<Movie> movieList;
@@ -38,7 +38,7 @@ class _MovieListState extends State<MovieList> {
                       widget.movieList[index].isFavorite
                           ? FlatButton.icon(
                               onPressed: () {
-                                SearchScreen.favoriteMovies
+                                MainSearchScreen.favoriteMovies
                                     .remove(widget.movieList[index]);
                                 setState(() {
                                   widget.movieList[index].isFavorite = false;
@@ -53,7 +53,7 @@ class _MovieListState extends State<MovieList> {
                             )
                           : FlatButton.icon(
                               onPressed: () {
-                                SearchScreen.favoriteMovies
+                                MainSearchScreen.favoriteMovies
                                     .add(widget.movieList[index]);
                                 setState(() {
                                   widget.movieList[index].isFavorite = true;
