@@ -15,6 +15,7 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
+
   Bloc<MovieEvent, MovieState> movieBloc;
 
 //  static final List<Movie> favoriteMovies = [];
@@ -28,7 +29,7 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     // ignore: close_sinks
-    final _movieBloc = BlocProvider.of<MovieSearchBloc>(context);
+     movieBloc = BlocProvider.of<MovieSearchBloc>(context);
     return Scaffold(
       backgroundColor: Color(0xFF00385d),
       appBar: AppBar(
@@ -59,19 +60,19 @@ class _SearchScreenState extends State<SearchScreen> {
         ],
       ),
       body: BlocBuilder(
-        cubit: _movieBloc,
+        cubit: movieBloc,
         builder: (context, state) {
           debugPrint("State: $state");
           if (state is MovieInitialState) {
             //return Center(child: Text("Initial"));
 
-            return _searchBarWidget(_movieBloc);
+            return _searchBarWidget(movieBloc);
           }
 
           if (state is MovieSearchingState) {
             return Column(
               children: [
-                _searchBarWidget(_movieBloc),
+                _searchBarWidget(movieBloc),
                 Center(
                   child: CircularProgressIndicator(),
                 )
@@ -90,7 +91,7 @@ class _SearchScreenState extends State<SearchScreen> {
             List<Movie> movieList = state.movieList;
             return _buildMovieList(movieList);
           } else {
-            return _searchBarWidget(_movieBloc);
+            return _searchBarWidget(movieBloc);
           }
         },
       ),
@@ -196,6 +197,7 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   void dispose() {
     _textController.dispose();
+    movieBloc.close();
     super.dispose();
   }
 
