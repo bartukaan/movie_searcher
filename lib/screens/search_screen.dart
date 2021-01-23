@@ -212,78 +212,81 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   Widget _searchBarWidget(MovieSearchBloc movieBloc) {
-    return Form(
-      key: _formKey,
-      child: Row(
-        mainAxisSize: MainAxisSize.max,
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.black12,
-                borderRadius: BorderRadius.circular(10.0),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black12,
-                    blurRadius: 6.0,
-                    offset: Offset(0, 2),
-                  ),
-                ],
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextFormField(
-                  controller: _textController,
-                  validator: ValidationBuilder()
-                      .required("Movie name is required.")
-                      .minLength(2, "Please enter a movie name")
-                      .build(),
-                  onSaved: (text) {
-                    _movieName = text;
-                    //   movieBloc.add(SearchMovieEvent(movieName: _movieName));
-                  },
-                  keyboardType: TextInputType.name,
-                  textInputAction: TextInputAction.search,
-                  textCapitalization: TextCapitalization.words,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontFamily: 'OpenSans',
-                  ),
-                  decoration: InputDecoration(
-                    border: InputBorder.none,
-                    prefixIcon: Icon(
-                      Icons.movie_outlined,
+    return Container(
+      child: Form(
+        key: _formKey,
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+              width: MediaQuery.of(context).size.width * 0.9,
+                decoration: BoxDecoration(
+                  color: Colors.black12,
+                  borderRadius: BorderRadius.circular(10.0),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black12,
+                      blurRadius: 6.0,
+                      offset: Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextFormField(
+                    controller: _textController,
+                    validator: ValidationBuilder()
+                        .required("Movie name is required.")
+                        .minLength(2, "Please enter a movie name")
+                        .build(),
+                    onSaved: (text) {
+                      _movieName = text;
+                      //   movieBloc.add(SearchMovieEvent(movieName: _movieName));
+                    },
+                    keyboardType: TextInputType.name,
+                    textInputAction: TextInputAction.search,
+                    textCapitalization: TextCapitalization.words,
+                    style: TextStyle(
                       color: Colors.white,
-                    ),
-                    hintText: 'Enter a movie name',
-                    hintStyle: TextStyle(
-                      color: Colors.white54,
                       fontFamily: 'OpenSans',
                     ),
-                    labelText: "Movie Name",
-                    labelStyle: TextStyle(
-                      color: Colors.white54,
-                      fontFamily: 'OpenSans',
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      prefixIcon: Icon(
+                        Icons.movie_outlined,
+                        color: Colors.white,
+                      ),
+                      hintText: 'Enter a movie name',
+                      hintStyle: TextStyle(
+                        color: Colors.white54,
+                        fontFamily: 'OpenSans',
+                      ),
+                      labelText: "Movie Name",
+                      labelStyle: TextStyle(
+                        color: Colors.white54,
+                        fontFamily: 'OpenSans',
+                      ),
                     ),
                   ),
                 ),
               ),
             ),
-          ),
-          IconButton(
-              icon: Icon(
-                Icons.search,
-                color: Colors.white,
-              ),
-              onPressed: () {
-                // _searchPressed();
-                if (_formKey.currentState.validate()) {
-                  _formKey.currentState.save();
-                  movieBloc.add(SearchMovieEvent(movieName: _movieName));
-                }
-              }),
-        ],
+            IconButton(
+                icon: Icon(
+                  Icons.search,
+                  color: Colors.white,
+                ),
+                onPressed: () {
+                  // _searchPressed();
+                  if (_formKey.currentState.validate()) {
+                    _formKey.currentState.save();
+                    movieBloc.add(SearchMovieEvent(movieName: _movieName));
+                  }
+                }),
+          ],
+        ),
       ),
     );
   }
