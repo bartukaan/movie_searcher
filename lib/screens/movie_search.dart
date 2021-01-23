@@ -18,20 +18,12 @@ class MovieSearch extends SearchDelegate<String> {
   ];
 
   final Bloc<MovieEvent, MovieState> movieBloc;
-  String movieName;
 
-  MovieSearch({@required this.movieBloc, this.movieName});
+  MovieSearch({@required this.movieBloc});
 
   @override
   List<Widget> buildActions(BuildContext context) {
-    return [
-      IconButton(
-          icon: Icon(Icons.clear),
-          onPressed: () {
-            query = "";
-            movieName = "";
-          })
-    ];
+    return [IconButton(icon: Icon(Icons.clear), onPressed: () => query = "")];
   }
 
   @override
@@ -78,9 +70,6 @@ class MovieSearch extends SearchDelegate<String> {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    if (movieName != null) {
-      query = movieName;
-    }
     return ListView.builder(
       itemBuilder: (context, index) => ListTile(
         leading: Icon(Icons.movie_outlined),

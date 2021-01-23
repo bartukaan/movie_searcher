@@ -4,6 +4,7 @@ import 'package:form_validator/form_validator.dart';
 import 'package:movie_app/blocs/movie/movie_search_bloc.dart';
 import 'package:movie_app/models/movie_model.dart';
 import 'package:movie_app/screens/favorite_movie_list.dart';
+import 'package:movie_app/widgets/movie_list_widget.dart';
 
 import 'movie_search.dart';
 
@@ -89,7 +90,8 @@ class _SearchScreenState extends State<SearchScreen> {
           }
           if (state is MovieSearchSuccessState) {
             List<Movie> movieList = state.movieList;
-            return _buildMovieList(movieList);
+            return MovieList(movieList: movieList);
+            //return _buildMovieList(movieList);
           } else {
             return _searchBarWidget(movieBloc);
           }
@@ -201,18 +203,6 @@ class _SearchScreenState extends State<SearchScreen> {
     super.dispose();
   }
 
-  void _searchPressed() {
-    if (_formKey.currentState.validate()) {
-      _formKey.currentState.save();
-
-      showSearch(
-          context: context,
-          delegate: MovieSearch(
-              movieBloc: BlocProvider.of<MovieSearchBloc>(context),
-              movieName: _movieName));
-    }
-  }
-
   Widget _searchBarWidget(MovieSearchBloc movieBloc) {
     return Container(
       child: Form(
@@ -289,83 +279,6 @@ class _SearchScreenState extends State<SearchScreen> {
                 }),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _searchBarWidget2() {
-    return Form(
-      key: _formKey,
-      child: Row(
-        mainAxisSize: MainAxisSize.max,
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.black12,
-                borderRadius: BorderRadius.circular(10.0),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black12,
-                    blurRadius: 6.0,
-                    offset: Offset(0, 2),
-                  ),
-                ],
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextFormField(
-                  controller: _textController,
-                  validator: ValidationBuilder()
-                      .required("Movie name is required.")
-                      .minLength(2, "Please enter a movie name")
-                      .build(),
-                  onSaved: (text) {
-                    _movieName = text;
-                    //   movieBloc.add(SearchMovieEvent(movieName: _movieName));
-                  },
-                  keyboardType: TextInputType.name,
-                  textInputAction: TextInputAction.search,
-                  textCapitalization: TextCapitalization.words,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontFamily: 'OpenSans',
-                  ),
-                  decoration: InputDecoration(
-                    border: InputBorder.none,
-                    prefixIcon: Icon(
-                      Icons.movie_outlined,
-                      color: Colors.white,
-                    ),
-                    hintText: 'Enter a movie name',
-                    hintStyle: TextStyle(
-                      color: Colors.white54,
-                      fontFamily: 'OpenSans',
-                    ),
-                    labelText: "Movie Name",
-                    labelStyle: TextStyle(
-                      color: Colors.white54,
-                      fontFamily: 'OpenSans',
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
-          IconButton(
-              icon: Icon(
-                Icons.search,
-                color: Colors.white,
-              ),
-              onPressed: () {
-                // _searchPressed();
-                if (_formKey.currentState.validate()) {
-                  _formKey.currentState.save();
-                  //      movieBloc.add(SearchMovieEvent(movieName: _movieName));
-                }
-              }),
-        ],
       ),
     );
   }
