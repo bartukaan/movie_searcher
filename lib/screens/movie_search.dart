@@ -5,7 +5,17 @@ import 'package:movie_app/models/movie_model.dart';
 
 class MovieSearch extends SearchDelegate<String> {
   static final List<Movie> favoriteMovies = [];
-  final recentSearchingMovies = ["Matrix","Lord of the Rings","Star Wars", "Harry Potter", "Avengers","Bourne Legacy","Inception","Fast and Furious","Shawshank Redemption"];
+  final recentSearchingMovies = [
+    "Matrix",
+    "Lord of the Rings",
+    "Star Wars",
+    "Harry Potter",
+    "Avengers",
+    "Bourne Legacy",
+    "Inception",
+    "Fast and Furious",
+    "Shawshank Redemption"
+  ];
 
   final Bloc<MovieEvent, MovieState> movieBloc;
 
@@ -42,11 +52,12 @@ class MovieSearch extends SearchDelegate<String> {
           }
           if (state is MovieSearchErrorState) {
             print("Error:" + state.errorText);
-            if(state.errorText.toString().contains("null")){
+            if (state.errorText.toString().contains("null")) {
               return Container(
                 child: Center(child: Text("Please Enter a Movie Name")),
               );
-            } /*else if(state.errorText.toString().contains("Too many results")){
+            }
+            /*else if(state.errorText.toString().contains("Too many results")){
               return Container(
                 child: Center(child: Text("Please enter a Full Movie Name too many result for your search!")),
               );
@@ -65,17 +76,16 @@ class MovieSearch extends SearchDelegate<String> {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-
     return ListView.builder(
       itemBuilder: (context, index) => ListTile(
         leading: Icon(Icons.movie_outlined),
         title: Text(recentSearchingMovies[index]),
         onTap: () {
           query = recentSearchingMovies[index];
-          if(!recentSearchingMovies.contains(query)){
+          if (!recentSearchingMovies.contains(query)) {
             recentSearchingMovies.add(query);
           }
-          if(query.isEmpty){
+          if (query.isEmpty) {
             final snackBar = SnackBar(
               content: Text('Please Enter a Movie Name!'),
               action: SnackBarAction(
@@ -88,7 +98,7 @@ class MovieSearch extends SearchDelegate<String> {
             );
 
             Scaffold.of(context).showSnackBar(snackBar);
-          }else {
+          } else {
             showResults(context);
           }
         },
@@ -126,8 +136,13 @@ class MovieSearch extends SearchDelegate<String> {
                         children: [
                           isAddedList
                               ? FlatButton.icon(
-                                  onPressed: () =>
-                                      favoriteMovies.add(movieList[index]),
+                                  onPressed: () {
+
+                                    favoriteMovies.remove(movieList[index]);
+                                    setState(() {
+                                      isAddedList = !isAddedList;
+                                    });
+                                  },
                                   icon: Icon(
                                     Icons.favorite,
                                     color: Colors.red,
@@ -139,7 +154,7 @@ class MovieSearch extends SearchDelegate<String> {
                                   onPressed: () {
                                     favoriteMovies.add(movieList[index]);
                                     setState(() {
-                                      isAddedList = true;
+                                      isAddedList = !isAddedList;
                                     });
                                   },
                                   icon: Icon(
