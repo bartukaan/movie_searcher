@@ -12,7 +12,7 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
-  TextEditingController _movieNameController;
+  TextEditingController _textController;
   var _formKey = GlobalKey<FormState>();
   String _movieName;
 
@@ -47,7 +47,30 @@ class _SearchScreenState extends State<SearchScreen> {
           ),
         ],
       ),
-      body: Stack(
+      body: Form(
+        key: _formKey,
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          children: <Widget>[
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: _buildSearchBar()
+              ),
+            ),
+            IconButton(
+                icon: Icon(Icons.search,color: Colors.white,),
+                onPressed: () {
+                  _searchPressed();
+                })
+          ],
+        ),
+      ),
+
+
+
+
+      /*Stack(
         children: [
           Padding(
             padding: const EdgeInsets.all(15.0),
@@ -75,7 +98,7 @@ class _SearchScreenState extends State<SearchScreen> {
             ),
           ),
         ],
-      ),
+      ),*/
     );
   }
 
@@ -95,10 +118,10 @@ class _SearchScreenState extends State<SearchScreen> {
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: TextFormField(
-          controller: _movieNameController,
+          controller: _textController,
           validator: ValidationBuilder()
               .required("Movie name is required.")
-              .minLength(0, "Please enter a movie name")
+              .minLength(2, "Please enter a movie name")
               .build(),
           onSaved: (text) {
             _movieName = text;
@@ -134,7 +157,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   void dispose() {
-    _movieNameController.dispose();
+    _textController.dispose();
     super.dispose();
   }
 
