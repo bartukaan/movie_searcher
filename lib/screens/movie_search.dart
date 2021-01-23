@@ -18,12 +18,20 @@ class MovieSearch extends SearchDelegate<String> {
   ];
 
   final Bloc<MovieEvent, MovieState> movieBloc;
+  String movieName;
 
-  MovieSearch(this.movieBloc);
+  MovieSearch({@required this.movieBloc, this.movieName});
 
   @override
   List<Widget> buildActions(BuildContext context) {
-    return [IconButton(icon: Icon(Icons.clear), onPressed: () => query = "")];
+    return [
+      IconButton(
+          icon: Icon(Icons.clear),
+          onPressed: () {
+            query = "";
+            movieName = "";
+          })
+    ];
   }
 
   @override
@@ -39,6 +47,7 @@ class MovieSearch extends SearchDelegate<String> {
 
   @override
   Widget buildResults(BuildContext context) {
+    query = movieName;
     movieBloc.add(SearchMovieEvent(movieName: query));
     return BlocBuilder(
         cubit: movieBloc,
@@ -57,12 +66,6 @@ class MovieSearch extends SearchDelegate<String> {
                 child: Center(child: Text("Please Enter a Movie Name")),
               );
             }
-            /*else if(state.errorText.toString().contains("Too many results")){
-              return Container(
-                child: Center(child: Text("Please enter a Full Movie Name too many result for your search!")),
-              );
-            }*/
-
           }
           if (state is MovieSearchSuccessState) {
             List<Movie> movieList = state.movieList;
@@ -76,6 +79,10 @@ class MovieSearch extends SearchDelegate<String> {
 
   @override
   Widget buildSuggestions(BuildContext context) {
+    if (movieName != null) {
+      query = movieName;
+      showResults(context);
+    }
     return ListView.builder(
       itemBuilder: (context, index) => ListTile(
         leading: Icon(Icons.movie_outlined),
@@ -85,22 +92,7 @@ class MovieSearch extends SearchDelegate<String> {
           if (!recentSearchingMovies.contains(query)) {
             recentSearchingMovies.add(query);
           }
-          if (query.isEmpty) {
-            final snackBar = SnackBar(
-              content: Text('Please Enter a Movie Name!'),
-              action: SnackBarAction(
-                label: 'OK',
-                onPressed: () {
-                  Navigator.pop(context);
-                  // Some code to undo the change.
-                },
-              ),
-            );
-
-            Scaffold.of(context).showSnackBar(snackBar);
-          } else {
-            showResults(context);
-          }
+          showResults(context);
         },
       ),
       itemCount: recentSearchingMovies.length,
@@ -137,7 +129,6 @@ class MovieSearch extends SearchDelegate<String> {
                           isAddedList
                               ? FlatButton.icon(
                                   onPressed: () {
-
                                     favoriteMovies.remove(movieList[index]);
                                     setState(() {
                                       isAddedList = !isAddedList;

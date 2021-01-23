@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:form_validator/form_validator.dart';
 import 'package:movie_app/blocs/movie/movie_bloc.dart';
 import 'package:movie_app/screens/favorite_movie_list.dart';
 
@@ -11,9 +12,14 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
+  TextEditingController _movieNameController;
+  var _formKey = GlobalKey<FormState>();
+  String _movieName;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xFF00385d),
       appBar: AppBar(
         title: FlatButton.icon(
           onPressed: () {
@@ -35,52 +41,112 @@ class _SearchScreenState extends State<SearchScreen> {
             icon: Icon(Icons.search),
             onPressed: () => showSearch(
               context: context,
-              delegate: MovieSearch(BlocProvider.of<MovieBloc>(context)),
+              delegate:
+                  MovieSearch(movieBloc: BlocProvider.of<MovieBloc>(context)),
             ),
           ),
-          /* FlatButton.icon(onPressed: () {
-            Navigator.of(context).push( MaterialPageRoute(
-                builder: (BuildContext context) => FavoriteMovieList()));
-          }, icon: Icon(Icons.movie_outlined,color: Colors.white,),label: Text("Go to My Favorite Movies",style: TextStyle(color: Colors.white),),)*/
         ],
       ),
-      body: Column(
+      body: Stack(
         children: [
-          Row(
-           // crossAxisAlignment: CrossAxisAlignment.stretch,
-          //  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  "Search Movie",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
-                ),
-              ),
-              IconButton(
-                icon: Icon(Icons.search),
-                onPressed: () => showSearch(
-                  context: context,
-                  delegate: MovieSearch(BlocProvider.of<MovieBloc>(context)),
-                ),
-              ),
-            ],
-          ),
-          Container(
-            child: Center(
-              child: FlatButton.icon(
-                minWidth: MediaQuery.of(context).size.width,
-                onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (BuildContext context) => FavoriteMovieList()));
-                },
-                icon: Icon(Icons.movie_outlined),
-                label: Text("My Favorite Movies"),
+          Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                children: [
+                  _buildSearchBar(),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  FlatButton.icon(
+                      onPressed: _searchPressed,
+                      icon: Icon(
+                        Icons.search,
+                        color: Colors.white,
+                        size: 45,
+                      ),
+                      label: Text(
+                        "Search Movie",
+                        style: TextStyle(color: Colors.white, fontSize: 24),
+                      ))
+                ],
               ),
             ),
           ),
         ],
       ),
     );
+  }
+
+  Widget _buildSearchBar() {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.black12,
+        borderRadius: BorderRadius.circular(10.0),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black12,
+            blurRadius: 6.0,
+            offset: Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: TextFormField(
+          controller: _movieNameController,
+          validator: ValidationBuilder()
+              .required("Movie name is required.")
+              .minLength(0, "Please enter a movie name")
+              .build(),
+          onSaved: (text) {
+            _movieName = text;
+          },
+          keyboardType: TextInputType.name,
+          textInputAction: TextInputAction.search,
+          textCapitalization: TextCapitalization.words,
+          style: TextStyle(
+            color: Colors.white,
+            fontFamily: 'OpenSans',
+          ),
+          decoration: InputDecoration(
+            border: InputBorder.none,
+            prefixIcon: Icon(
+              Icons.movie_outlined,
+              color: Colors.white,
+            ),
+            hintText: 'Enter a movie name',
+            hintStyle: TextStyle(
+              color: Colors.white54,
+              fontFamily: 'OpenSans',
+            ),
+            labelText: "Movie Name",
+            labelStyle: TextStyle(
+              color: Colors.white54,
+              fontFamily: 'OpenSans',
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _movieNameController.dispose();
+    super.dispose();
+  }
+
+  void _searchPressed() {
+    if (_formKey.currentState.validate()) {
+      _formKey.currentState.save();
+
+      showSearch(
+          context: context,
+          delegate: MovieSearch(
+              movieBloc: BlocProvider.of<MovieBloc>(context),
+              movieName: _movieName));
+    }
   }
 }
