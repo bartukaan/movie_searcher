@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:form_validator/form_validator.dart';
-import 'package:movie_app/blocs/movie/movie_bloc.dart';
+import 'package:movie_app/blocs/movie/movie_search_bloc.dart';
 import 'package:movie_app/screens/favorite_movie_list.dart';
 
 import 'movie_search.dart';
@@ -42,7 +42,7 @@ class _SearchScreenState extends State<SearchScreen> {
             onPressed: () => showSearch(
               context: context,
               delegate:
-                  MovieSearch(movieBloc: BlocProvider.of<MovieBloc>(context)),
+                  MovieSearch(movieBloc: BlocProvider.of<MovieSearchBloc>(context)),
             ),
           ),
         ],
@@ -145,7 +145,7 @@ class _SearchScreenState extends State<SearchScreen> {
       showSearch(
           context: context,
           delegate: MovieSearch(
-              movieBloc: BlocProvider.of<MovieBloc>(context),
+              movieBloc: BlocProvider.of<MovieSearchBloc>(context),
               movieName: _movieName));
     }
   }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:movie_app/blocs/movie/movie_bloc.dart';
+import 'package:movie_app/blocs/movie/movie_search_bloc.dart';
 import 'package:movie_app/models/movie_model.dart';
 
 class MovieSearch extends SearchDelegate<String> {
@@ -81,7 +81,6 @@ class MovieSearch extends SearchDelegate<String> {
   Widget buildSuggestions(BuildContext context) {
     if (movieName != null) {
       query = movieName;
-      showResults(context);
     }
     return ListView.builder(
       itemBuilder: (context, index) => ListTile(

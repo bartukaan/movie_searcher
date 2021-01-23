@@ -8,14 +8,14 @@ import 'package:movie_app/repositories/movie_repository.dart';
 
 import '../../locator.dart';
 
-part 'movie_event.dart';
+part 'movie_search_event.dart';
 
-part 'movie_state.dart';
+part 'movie_search_state.dart';
 
-class MovieBloc extends Bloc<MovieEvent, MovieState> {
+class MovieSearchBloc extends Bloc<MovieEvent, MovieState> {
   final MovieRepository movieRepository = getIt<MovieRepository>();
 
-  MovieBloc() : super(MovieInitialState());
+  MovieSearchBloc() : super(MovieInitialState());
 
   @override
   MovieState get initialState => MovieInitialState();

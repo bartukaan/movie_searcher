@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movie_app/locator.dart';
 import 'package:movie_app/screens/search_screen.dart';
 
-import 'blocs/movie/movie_bloc.dart';
+import 'blocs/movie/movie_search_bloc.dart';
 
 void main() {
   setupLocator();
@@ -21,8 +21,8 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: BlocProvider<MovieBloc>(
-          create: (context)=> MovieBloc(),
+      home: BlocProvider<MovieSearchBloc>(
+          create: (context)=> MovieSearchBloc(),
           child: SearchScreen())  //MovieScreen()),
     );
   }
