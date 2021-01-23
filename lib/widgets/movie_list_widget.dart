@@ -12,7 +12,7 @@ class MovieList extends StatefulWidget {
 }
 
 class _MovieListState extends State<MovieList> {
-  bool isAddedList = false;
+
   @override
   Widget build(BuildContext context) {
 
@@ -37,14 +37,15 @@ class _MovieListState extends State<MovieList> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      isAddedList
-                          ? FlatButton.icon(
+                widget.movieList[index].isFavorite
+                    ? FlatButton.icon(
                         onPressed: () {
                           SearchScreen.favoriteMovies
                               .remove(widget.movieList[index]);
                           setState(() {
-                            isAddedList = !isAddedList;
+                            widget.movieList[index].isFavorite  = false;
                           });
+
                         },
                         icon: Icon(
                           Icons.favorite,
@@ -58,7 +59,7 @@ class _MovieListState extends State<MovieList> {
                           SearchScreen.favoriteMovies
                               .add(widget.movieList[index]);
                           setState(() {
-                            isAddedList = !isAddedList;
+                            widget.movieList[index].isFavorite  = true;
                           });
                         },
                         icon: Icon(

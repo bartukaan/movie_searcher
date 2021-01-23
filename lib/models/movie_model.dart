@@ -40,6 +40,7 @@ class Movie {
     this.imdbId,
     this.type,
     this.poster,
+    this.isFavorite=false
   });
 
   String title;
@@ -47,6 +48,7 @@ class Movie {
   String imdbId;
   Type type;
   String poster;
+  bool isFavorite;
 
   factory Movie.fromJson(Map<String, dynamic> json) => Movie(
     title: json["Title"] == null ? null : json["Title"],
