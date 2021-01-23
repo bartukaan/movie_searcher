@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movie_app/blocs/movie/movie_bloc.dart';
 import 'package:movie_app/models/movie_model.dart';
 
-class MovieSearch extends SearchDelegate<String> {
+class MovieSearch extends SearchDelegate<String>  {
   static final List<Movie> favoriteMovies = [];
   final recentSearchingMovies = ["Matrix", "Harry Potter", "Avengers"];
 
@@ -58,8 +58,15 @@ class MovieSearch extends SearchDelegate<String> {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    final suggestionList =
-        query.isEmpty ? recentSearchingMovies : recentSearchingMovies;
+    var suggestionList = recentSearchingMovies;
+/*
+    if (query.isEmpty) {
+      suggestionList = recentSearchingMovies;
+    } else {
+      for (int i = 0; i <= MovieSearch.favoriteMovies.length; i++) {
+        suggestionList.add(MovieSearch.favoriteMovies[i]);
+      }
+    }*/
 
     return ListView.builder(
       itemBuilder: (context, index) => ListTile(
@@ -67,6 +74,7 @@ class MovieSearch extends SearchDelegate<String> {
         title: Text(suggestionList[index]),
         onTap: () {
           recentSearchingMovies.add(query);
+
           showResults(context);
         },
       ),
@@ -75,6 +83,7 @@ class MovieSearch extends SearchDelegate<String> {
   }
 
   Widget _buildMovieList(List<Movie> movieList) {
+    bool isAddedList = false;
     return GridView.builder(
       shrinkWrap: true,
       itemCount: movieList.length,
@@ -89,65 +98,83 @@ class MovieSearch extends SearchDelegate<String> {
               //elevation: 1,
               color: Colors.grey.shade300,
 
-              child: Container(
-                decoration:
+              child: StatefulBuilder(
+                builder: (BuildContext context,StateSetter setState){
+                return  Container(
+                    decoration:
                     BoxDecoration(borderRadius: BorderRadius.circular(20)),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        FlatButton.icon(
-                            onPressed: () =>
-                                favoriteMovies.add(movieList[index]),
-                            icon: Icon(
-                              Icons.favorite,
-                              size: 30,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            isAddedList
+                                ? FlatButton.icon(
+                              onPressed: () =>
+                                  favoriteMovies.add(movieList[index]),
+                              icon: Icon(
+                                Icons.favorite,
+                                color: Colors.red,
+                                size: 30,
+                              ),
+                              label: Text("Added Favorite"),
+                            )
+                                : FlatButton.icon(
+                              onPressed: () {
+                                favoriteMovies.add(movieList[index]);
+                                setState(() {
+                                 isAddedList =true;
+                                });
+                              },
+
+                              icon: Icon(
+                                Icons.favorite,
+                                size: 30,
+                              ),
+                              label: Text("Add Favorite"),
                             ),
-                            label: Text("Add Favorite"),),
+                          ],
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Center(
+                            child: Text(
+                              movieList[index].title,
+                              style: TextStyle(
+                                  fontSize: 14, fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Center(
+                              child: Text(movieList[index].year,
+                                  style: TextStyle(
+                                      fontSize: 14, fontWeight: FontWeight.bold))),
+                        ),
+                        /*  Card(
+                        color: Colors.transparent,*/
+                        Container(
+                            width: 100, //MediaQuery.of(context).size.width,
+                            height: 250, //MediaQuery.of(context).size.height,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                image: DecorationImage(
+                                    image: NetworkImage(movieList[index].poster),
+                                    fit: BoxFit.fitHeight)),
+                            child: Column(
+                              children: [
+                                Text("TYPE:" + movieList[index].type.toString()),
+                                Text("IMDB ID: ${movieList[index].imdbId}"),
+                              ],
+                            )),
+                        // ),
                       ],
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Center(
-                        child: Text(
-                          movieList[index].title,
-                          style: TextStyle(
-                              fontSize: 14, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Center(
-                          child: Text(movieList[index].year,
-                              style: TextStyle(
-                                  fontSize: 14, fontWeight: FontWeight.bold))),
-                    ),
-                  /*  Card(
-                      color: Colors.transparent,*/
-                     Container(
-                      width: 100, //MediaQuery.of(context).size.width,
-                       height: 250, //MediaQuery.of(context).size.height,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(5),
-                            image: DecorationImage(
-                                image: NetworkImage(movieList[index].poster),
-                                fit: BoxFit.fitHeight)),
-                      child: Column(
-                        children: [
-                          Text("TYPE:"+movieList[index].type.toString()),
-                          Text("IMDB ID: ${movieList[index].imdbId}"),
-                        ],
-                      )
+                  );
+                }
 
-
-                      ),
-                   // ),
-
-                  ],
-                ),
               ),
             ),
           ),
