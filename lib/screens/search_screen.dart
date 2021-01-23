@@ -15,7 +15,8 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
-  // final Bloc<MovieEvent, MovieState> movieBloc;
+  Bloc<MovieEvent, MovieState> movieBloc;
+
 //  static final List<Movie> favoriteMovies = [];
 
   TextEditingController _textController;
@@ -87,12 +88,7 @@ class _SearchScreenState extends State<SearchScreen> {
           }
           if (state is MovieSearchSuccessState) {
             List<Movie> movieList = state.movieList;
-            return Wrap(
-              children: [
-                // _searchBarWidget(_movieBloc) ,
-                _buildMovieList(movieList),
-              ],
-            );
+            return _buildMovieList(movieList);
           } else {
             return _searchBarWidget(_movieBloc);
           }
@@ -115,7 +111,6 @@ class _SearchScreenState extends State<SearchScreen> {
             borderRadius: BorderRadius.circular(16),
             //elevation: 1,
             color: Colors.grey.shade300,
-
             child: Container(
               decoration:
                   BoxDecoration(borderRadius: BorderRadius.circular(20)),
@@ -286,6 +281,83 @@ class _SearchScreenState extends State<SearchScreen> {
                 if (_formKey.currentState.validate()) {
                   _formKey.currentState.save();
                   movieBloc.add(SearchMovieEvent(movieName: _movieName));
+                }
+              }),
+        ],
+      ),
+    );
+  }
+
+  Widget _searchBarWidget2() {
+    return Form(
+      key: _formKey,
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.black12,
+                borderRadius: BorderRadius.circular(10.0),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black12,
+                    blurRadius: 6.0,
+                    offset: Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextFormField(
+                  controller: _textController,
+                  validator: ValidationBuilder()
+                      .required("Movie name is required.")
+                      .minLength(2, "Please enter a movie name")
+                      .build(),
+                  onSaved: (text) {
+                    _movieName = text;
+                    //   movieBloc.add(SearchMovieEvent(movieName: _movieName));
+                  },
+                  keyboardType: TextInputType.name,
+                  textInputAction: TextInputAction.search,
+                  textCapitalization: TextCapitalization.words,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontFamily: 'OpenSans',
+                  ),
+                  decoration: InputDecoration(
+                    border: InputBorder.none,
+                    prefixIcon: Icon(
+                      Icons.movie_outlined,
+                      color: Colors.white,
+                    ),
+                    hintText: 'Enter a movie name',
+                    hintStyle: TextStyle(
+                      color: Colors.white54,
+                      fontFamily: 'OpenSans',
+                    ),
+                    labelText: "Movie Name",
+                    labelStyle: TextStyle(
+                      color: Colors.white54,
+                      fontFamily: 'OpenSans',
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          IconButton(
+              icon: Icon(
+                Icons.search,
+                color: Colors.white,
+              ),
+              onPressed: () {
+                // _searchPressed();
+                if (_formKey.currentState.validate()) {
+                  _formKey.currentState.save();
+                  //      movieBloc.add(SearchMovieEvent(movieName: _movieName));
                 }
               }),
         ],
