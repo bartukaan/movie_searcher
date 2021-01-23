@@ -25,7 +25,8 @@ class MovieSearchBloc extends Bloc<MovieEvent, MovieState> {
     if (event is SearchMovieEvent) {
       yield MovieSearchingState();
       try {
-        final List<Movie> movieList = await movieRepository.getMovies(event.movieName);
+        final List<Movie> movieList =
+            await movieRepository.getMovies(event.movieName);
         yield MovieSearchSuccessState(movieList: movieList);
       } catch (e) {
         yield MovieSearchErrorState(errorText: e.toString());
