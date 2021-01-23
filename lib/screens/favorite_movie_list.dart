@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:movie_app/models/movie_model.dart';
 import 'package:movie_app/screens/movie_search.dart';
+import 'package:movie_app/screens/search_screen.dart';
 
 class FavoriteMovieList extends StatefulWidget {
   @override
@@ -12,7 +13,8 @@ class _FavoriteMovieListState extends State<FavoriteMovieList> {
 
   @override
   void initState() {
-    favoriteMovieList = MovieSearch.favoriteMovies;
+    //favoriteMovieList = MovieSearch.favoriteMovies;
+    favoriteMovieList = SearchScreen.favoriteMovies;
     super.initState();
   }
 
