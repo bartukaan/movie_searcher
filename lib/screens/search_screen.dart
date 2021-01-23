@@ -15,10 +15,21 @@ class _SearchScreenState extends State<SearchScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title:  FlatButton.icon(onPressed: () {
-          Navigator.of(context).push( MaterialPageRoute(
-              builder: (BuildContext context) => FavoriteMovieList()));
-        }, icon: Icon(Icons.movie_outlined,color: Colors.white,),label: Text("Go to My Favorite Movies",style: TextStyle(color: Colors.white),),),//Text("Search Movie APP"),
+        title: FlatButton.icon(
+          onPressed: () {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (BuildContext context) => FavoriteMovieList()));
+          },
+          icon: Icon(
+            Icons.movie_outlined,
+            color: Colors.white,
+          ),
+          label: Text(
+            "Go to My Favorite Movies",
+            style: TextStyle(color: Colors.white),
+          ),
+        ),
+        //Text("Search Movie APP"),
         actions: [
           IconButton(
             icon: Icon(Icons.search),
@@ -27,24 +38,48 @@ class _SearchScreenState extends State<SearchScreen> {
               delegate: MovieSearch(BlocProvider.of<MovieBloc>(context)),
             ),
           ),
-         /* FlatButton.icon(onPressed: () {
+          /* FlatButton.icon(onPressed: () {
             Navigator.of(context).push( MaterialPageRoute(
                 builder: (BuildContext context) => FavoriteMovieList()));
           }, icon: Icon(Icons.movie_outlined,color: Colors.white,),label: Text("Go to My Favorite Movies",style: TextStyle(color: Colors.white),),)*/
         ],
       ),
-      body: Container(
-        child: Center(
-          child: FlatButton.icon(
-            minWidth: MediaQuery.of(context).size.width,
-            onPressed: () {
-              Navigator.of(context).push( MaterialPageRoute(
-                  builder: (BuildContext context) => FavoriteMovieList()));
-            },
-            icon: Icon(Icons.movie_outlined),
-            label: Text("My Favorite Movies"),
+      body: Column(
+        children: [
+          Row(
+           // crossAxisAlignment: CrossAxisAlignment.stretch,
+          //  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  "Search Movie",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+                ),
+              ),
+              IconButton(
+                icon: Icon(Icons.search),
+                onPressed: () => showSearch(
+                  context: context,
+                  delegate: MovieSearch(BlocProvider.of<MovieBloc>(context)),
+                ),
+              ),
+            ],
           ),
-        ),
+          Container(
+            child: Center(
+              child: FlatButton.icon(
+                minWidth: MediaQuery.of(context).size.width,
+                onPressed: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (BuildContext context) => FavoriteMovieList()));
+                },
+                icon: Icon(Icons.movie_outlined),
+                label: Text("My Favorite Movies"),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
