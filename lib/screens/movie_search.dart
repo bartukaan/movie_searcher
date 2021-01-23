@@ -4,7 +4,7 @@ import 'package:movie_app/blocs/movie/movie_bloc.dart';
 import 'package:movie_app/models/movie_model.dart';
 
 class MovieSearch extends SearchDelegate<String> {
-  final List<Movie> favoriteMovies = [];
+  static final List<Movie> favoriteMovies = [];
   final recentSearchingMovies = ["Matrix", "Harry Potter", "Avengers"];
 
   final Bloc<MovieEvent, MovieState> movieBloc;
@@ -65,95 +65,99 @@ class MovieSearch extends SearchDelegate<String> {
       itemBuilder: (context, index) => ListTile(
         leading: Icon(Icons.movie_outlined),
         title: Text(suggestionList[index]),
-        onTap: () => showResults(context),
+        onTap: () {
+          recentSearchingMovies.add(query);
+          showResults(context);
+        },
       ),
       itemCount: suggestionList.length,
     );
   }
 
   Widget _buildMovieList(List<Movie> movieList) {
-    return Column(
-     children: [
+    return GridView.builder(
+      shrinkWrap: true,
+      itemCount: movieList.length,
+      gridDelegate:
+          SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+      itemBuilder: (BuildContext context, int index) {
+        return GestureDetector(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Material(
+              borderRadius: BorderRadius.circular(16),
+              //elevation: 1,
+              color: Colors.grey.shade300,
 
-FlatButton.icon(onPressed: (){}, icon:Icon(Icons.movie_outlined), label: Text("My Favorite's Movies")),
-       GridView.builder(
-         shrinkWrap: true,
-         itemCount: movieList.length,
-         gridDelegate:
-         SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
-         itemBuilder: (BuildContext context, int index) {
-           return GestureDetector(
-             child: Padding(
-               padding: const EdgeInsets.all(8.0),
-               child: Material(
-                 borderRadius: BorderRadius.circular(16),
-                 elevation: 4,
-                 color: Colors.grey,
-                 child: Container(
-                   decoration: BoxDecoration(
-                       borderRadius: BorderRadius.circular(20), color: Colors.red),
-                   child: Column(
-                     children: [
-                       Padding(
-                         padding: const EdgeInsets.all(8.0),
-                         child: Text(
-                           movieList[index].title,
-                           style: TextStyle(
-                               fontSize: 14, fontWeight: FontWeight.bold),
-                         ),
-                       ),
-                       Padding(
-                         padding: const EdgeInsets.all(8.0),
-                         child: Center(
-                             child: Text(movieList[index].year,
-                                 style: TextStyle(
-                                     fontSize: 14, fontWeight: FontWeight.bold))),
-                       ),
-                       InkWell(
-                         onTap: () {
-                           /* Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) =>
-                                  Detay(imgPath: 'assets/modelgrid1.jpeg')));*/
-                         },
-                         child: Hero(
-                           tag: movieList[index].poster,
-                           child: /*Expanded(child: Image(image: NetworkImage(movieList[index].poster),fit: BoxFit.cover,)),*/
-                           Container(
-                             width: 250, //MediaQuery.of(context).size.width,
-                             height: 300, //MediaQuery.of(context).size.height,
-                             decoration: BoxDecoration(
-                                 borderRadius: BorderRadius.circular(5),
-                                 image: DecorationImage(
-                                     image:
-                                     NetworkImage(movieList[index].poster),
-                                     fit: BoxFit.fill)),
-                           ),
-                         ),
-                       ),
+              child: Container(
+                decoration:
+                    BoxDecoration(borderRadius: BorderRadius.circular(20)),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        FlatButton.icon(
+                            onPressed: () =>
+                                favoriteMovies.add(movieList[index]),
+                            icon: Icon(
+                              Icons.favorite,
+                              size: 30,
+                            ),
+                            label: Text("Add Favorite"),),
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Center(
+                        child: Text(
+                          movieList[index].title,
+                          style: TextStyle(
+                              fontSize: 14, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Center(
+                          child: Text(movieList[index].year,
+                              style: TextStyle(
+                                  fontSize: 14, fontWeight: FontWeight.bold))),
+                    ),
+                  /*  Card(
+                      color: Colors.transparent,*/
+                     Container(
+                      width: 100, //MediaQuery.of(context).size.width,
+                       height: 250, //MediaQuery.of(context).size.height,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                            image: DecorationImage(
+                                image: NetworkImage(movieList[index].poster),
+                                fit: BoxFit.fitHeight)),
+                      child: Column(
+                        children: [
+                          Text("TYPE:"+movieList[index].type.toString()),
+                          Text("IMDB ID: ${movieList[index].imdbId}"),
+                        ],
+                      )
 
 
-/*  SizedBox(
-          width: 30,
-                      ),*/
-                       Divider(),
-                       IconButton(
-                         icon:Icon(Icons.favorite,size: 30,),
-                         onPressed: ()=>favoriteMovies.add(movieList[index]),
-                       ),
-                     ],
-                   ),
-                 ),
-               ),
-             ),
-             onTap: () => debugPrint("Movie $index tıklanıldı"),
-             onDoubleTap: () => debugPrint("Movie $index çift tıklanıldı"),
-             onLongPress: () => debugPrint("Movie $index uzun basıldı"),
-             onHorizontalDragStart: (e) =>
-                 debugPrint("Movie $index uzun basıldı $e"),
-           );
-         },
-       ),
-     ],
+                      ),
+                   // ),
+
+                  ],
+                ),
+              ),
+            ),
+          ),
+          onTap: () => debugPrint("Movie $index tıklanıldı"),
+          onDoubleTap: () => debugPrint("Movie $index çift tıklanıldı"),
+          onLongPress: () => debugPrint("Movie $index uzun basıldı"),
+          onHorizontalDragStart: (e) =>
+              debugPrint("Movie $index uzun basıldı $e"),
+        );
+      },
     );
   }
 }
