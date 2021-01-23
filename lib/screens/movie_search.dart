@@ -7,8 +7,6 @@ class MovieSearch extends SearchDelegate<String> {
   final List<Movie> favoriteMovies = [];
   final recentSearchingMovies = ["Matrix", "Harry Potter", "Avengers"];
 
-
-
   final Bloc<MovieEvent, MovieState> movieBloc;
 
   MovieSearch(this.movieBloc);
@@ -31,44 +29,37 @@ class MovieSearch extends SearchDelegate<String> {
 
   @override
   Widget buildResults(BuildContext context) {
-    // ignore: close_sinks
-  //  final _movieBloc = BlocProvider.of<MovieBloc>(context);
     movieBloc.add(SearchMovieEvent(movieName: query));
-  return BlocBuilder(
-      cubit: movieBloc,
-      builder: (context, state) {
-        debugPrint("State: $state");
-        if (state is MovieInitialState) {
-          return Center(child: Text("Initial"));
-        }
-        if (state is MovieSearchingState) {
-          return Center(child: Text("Loading"));
-        }
-        if (state is MovieSearchErrorState) {
-          print("Error:"+state.errorText);
-          return Container(child: Text(state.errorText),);
-        }
-        if (state is MovieSearchSuccessState) {
-          //var movieTitle = state.movie.title;
-          List<Movie> movieList = state.movieList;
-      /*    for (int i = 0; i <= movieList.length; i++) {
-        //    debugPrint(    "Movie Screen => Movie Loaded " + movieList[i].toString());
-          }*/
-          return _buildMovieList(movieList);
-        }
-        else {
+    return BlocBuilder(
+        cubit: movieBloc,
+        builder: (context, state) {
+          debugPrint("State: $state");
+          if (state is MovieInitialState) {
+            return Center(child: Text("Initial"));
+          }
+          if (state is MovieSearchingState) {
+            return Center(child: CircularProgressIndicator());
+          }
+          if (state is MovieSearchErrorState) {
+            print("Error:" + state.errorText);
+            return Container(
+              child: Text(state.errorText),
+            );
+          }
+          if (state is MovieSearchSuccessState) {
+            List<Movie> movieList = state.movieList;
+
+            return _buildMovieList(movieList);
+          } else {
             return Container();
-        }
-      }
-
-
-
-        );
+          }
+        });
   }
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    final suggestionList = query.isEmpty ? recentSearchingMovies : recentSearchingMovies;
+    final suggestionList =
+        query.isEmpty ? recentSearchingMovies : recentSearchingMovies;
 
     return ListView.builder(
       itemBuilder: (context, index) => ListTile(
@@ -81,52 +72,88 @@ class MovieSearch extends SearchDelegate<String> {
   }
 
   Widget _buildMovieList(List<Movie> movieList) {
-    return  GridView.builder(
-      itemCount: movieList.length,
-      gridDelegate:
-      SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
-      itemBuilder: (BuildContext context, int index) {
-        return GestureDetector(
-          child: Container(
-            alignment: Alignment.bottomCenter,
-            decoration: BoxDecoration(
-                border: Border.all(color: Colors.orange, width: 10),
-                //borderRadius: new BorderRadius.all(new Radius.circular(5.0)),
-                boxShadow: [
-                  new BoxShadow(
-                    color: Colors.red,
-                    offset: new Offset(10.0, 5.0),
-                    blurRadius: 20.0,
-                  )
-                ],
-                shape: BoxShape.rectangle,
-                color: Colors.blue[100 * ((index + 1) % 8)],
-                gradient: LinearGradient(
-                    colors: [Colors.yellow, Colors.red],
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter),
-                image: DecorationImage(
-                    image: NetworkImage(movieList[index].poster),
-                    fit: BoxFit.contain,
-                    alignment: Alignment.topCenter)),
-            margin: EdgeInsets.all(20),
-            child: Padding(
-              padding: EdgeInsets.all(10),
-              child: Text(
-                "${movieList[index].title}",
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 16, color: Colors.white),
-              ),
-            ),
-          ),
+    return Column(
+     children: [
 
-          onTap: () => debugPrint("Merhaba flutter $index tıklanıldı"),
-          onDoubleTap: () => debugPrint("Merhaba flutter $index çift tıklanıldı"),
-          onLongPress: () => debugPrint("Merhaba flutter $index uzun basıldı"),
-          onHorizontalDragStart: (e) => debugPrint("Merhaba flutter $index uzun basıldı $e"),
-        );
-      },
+FlatButton.icon(onPressed: (){}, icon:Icon(Icons.movie_outlined), label: Text("My Favorite's Movies")),
+       GridView.builder(
+         shrinkWrap: true,
+         itemCount: movieList.length,
+         gridDelegate:
+         SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+         itemBuilder: (BuildContext context, int index) {
+           return GestureDetector(
+             child: Padding(
+               padding: const EdgeInsets.all(8.0),
+               child: Material(
+                 borderRadius: BorderRadius.circular(16),
+                 elevation: 4,
+                 color: Colors.grey,
+                 child: Container(
+                   decoration: BoxDecoration(
+                       borderRadius: BorderRadius.circular(20), color: Colors.red),
+                   child: Column(
+                     children: [
+                       Padding(
+                         padding: const EdgeInsets.all(8.0),
+                         child: Text(
+                           movieList[index].title,
+                           style: TextStyle(
+                               fontSize: 14, fontWeight: FontWeight.bold),
+                         ),
+                       ),
+                       Padding(
+                         padding: const EdgeInsets.all(8.0),
+                         child: Center(
+                             child: Text(movieList[index].year,
+                                 style: TextStyle(
+                                     fontSize: 14, fontWeight: FontWeight.bold))),
+                       ),
+                       InkWell(
+                         onTap: () {
+                           /* Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) =>
+                                  Detay(imgPath: 'assets/modelgrid1.jpeg')));*/
+                         },
+                         child: Hero(
+                           tag: movieList[index].poster,
+                           child: /*Expanded(child: Image(image: NetworkImage(movieList[index].poster),fit: BoxFit.cover,)),*/
+                           Container(
+                             width: 250, //MediaQuery.of(context).size.width,
+                             height: 300, //MediaQuery.of(context).size.height,
+                             decoration: BoxDecoration(
+                                 borderRadius: BorderRadius.circular(5),
+                                 image: DecorationImage(
+                                     image:
+                                     NetworkImage(movieList[index].poster),
+                                     fit: BoxFit.fill)),
+                           ),
+                         ),
+                       ),
+
+
+/*  SizedBox(
+          width: 30,
+                      ),*/
+                       Divider(),
+                       IconButton(
+                         icon:Icon(Icons.favorite,size: 30,),
+                         onPressed: ()=>favoriteMovies.add(movieList[index]),
+                       ),
+                     ],
+                   ),
+                 ),
+               ),
+             ),
+             onTap: () => debugPrint("Movie $index tıklanıldı"),
+             onDoubleTap: () => debugPrint("Movie $index çift tıklanıldı"),
+             onLongPress: () => debugPrint("Movie $index uzun basıldı"),
+             onHorizontalDragStart: (e) =>
+                 debugPrint("Movie $index uzun basıldı $e"),
+           );
+         },
+       ),
+     ],
     );
   }
 }
-
