@@ -47,7 +47,6 @@ class MovieSearch extends SearchDelegate<String> {
 
   @override
   Widget buildResults(BuildContext context) {
-    query = movieName;
     movieBloc.add(SearchMovieEvent(movieName: query));
     return BlocBuilder(
         cubit: movieBloc,

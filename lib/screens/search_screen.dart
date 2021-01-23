@@ -62,6 +62,8 @@ class _SearchScreenState extends State<SearchScreen> {
                 icon: Icon(Icons.search,color: Colors.white,),
                 onPressed: () {
                   _searchPressed();
+
+
                 })
           ],
         ),
