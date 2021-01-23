@@ -73,6 +73,7 @@ class MovieSearch extends SearchDelegate<String>  {
         leading: Icon(Icons.movie_outlined),
         title: Text(suggestionList[index]),
         onTap: () {
+          query = suggestionList[index];
           recentSearchingMovies.add(query);
 
           showResults(context);

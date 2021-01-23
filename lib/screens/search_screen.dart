@@ -15,7 +15,10 @@ class _SearchScreenState extends State<SearchScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Search Movie APP"),
+        title:  FlatButton.icon(onPressed: () {
+          Navigator.of(context).push( MaterialPageRoute(
+              builder: (BuildContext context) => FavoriteMovieList()));
+        }, icon: Icon(Icons.movie_outlined,color: Colors.white,),label: Text("Go to My Favorite Movies",style: TextStyle(color: Colors.white),),),//Text("Search Movie APP"),
         actions: [
           IconButton(
             icon: Icon(Icons.search),
@@ -23,7 +26,11 @@ class _SearchScreenState extends State<SearchScreen> {
               context: context,
               delegate: MovieSearch(BlocProvider.of<MovieBloc>(context)),
             ),
-          )
+          ),
+         /* FlatButton.icon(onPressed: () {
+            Navigator.of(context).push( MaterialPageRoute(
+                builder: (BuildContext context) => FavoriteMovieList()));
+          }, icon: Icon(Icons.movie_outlined,color: Colors.white,),label: Text("Go to My Favorite Movies",style: TextStyle(color: Colors.white),),)*/
         ],
       ),
       body: Container(
