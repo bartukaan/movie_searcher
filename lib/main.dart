@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
       ),
       home: BlocProvider<MovieSearchBloc>(
           create: (context)=> MovieSearchBloc(),
-          child: SearchScreen())  //MovieScreen()),
+          child: SearchScreen()),
     );
   }
 }

@@ -31,8 +31,17 @@ class _FavoriteMovieListState extends State<FavoriteMovieList> {
         itemCount: favoriteMovieList.length,
         itemBuilder: (context, index) {
           return ListTile(
-            leading: Icon(Icons.movie),
-            subtitle: Text(favoriteMovieList[index].title),
+            title: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Icon(Icons.movie),
+                SizedBox(width: 15),
+                Text(favoriteMovieList[index].title),
+              ],
+            ),
+            //leading:,
+            //subtitle: ,
             trailing: IconButton(
                 icon: Icon(Icons.delete),
                 onPressed: () => _showAlertDialog(context, index)),
