@@ -7,7 +7,6 @@ import 'package:movie_app/models/movie_model.dart';
 import 'movie_base.dart';
 
 class MovieDataService implements MovieBase {
-
   static const baseUrl =
       "http://www.omdbapi.com/?i=tt3896198&apikey=52fb3639&s=";
 
@@ -34,12 +33,11 @@ class MovieDataService implements MovieBase {
     }
     final responseJSON = jsonDecode(response.body);
     debugPrint("Movie Service => response: " + responseJSON.toString());
-    var movieList = responseJSON.map<Movie>((p) => Movie.fromJson(p)).toList();
+    var data = responseJSON["Search"];
+    debugPrint("Movie Service => responseJSON[Search]: " + data.toString());
 
-    print("Meter Service => Get All SUCCESS Data: " +
-        movieList.toString() +
-        ":" +
-        Future.value(movieList).toString());
+    var movieList = data.map<Movie>((p) => Movie.fromJson(p)).toList();
+
     return Future.value(movieList);
   }
 }

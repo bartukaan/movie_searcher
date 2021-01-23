@@ -5,12 +5,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../blocs/movie/movie_bloc.dart';
 import '../models/movie_model.dart';
 
-class MoviePage extends StatefulWidget {
+class MovieScreen extends StatefulWidget {
   @override
-  _MoviePageState createState() => _MoviePageState();
+  _MovieScreenState createState() => _MovieScreenState();
 }
 
-class _MoviePageState extends State<MoviePage> {
+class _MovieScreenState extends State<MovieScreen> {
   Icon _searchIcon = Icon(
     Icons.search,
   );
@@ -31,7 +31,7 @@ class _MoviePageState extends State<MoviePage> {
     // ignore: close_sinks
     final _movieBloc = BlocProvider.of<MovieBloc>(context);
 
-    _movieBloc.add(FetchMovieEvent(movieName: "Matrix"));
+    _movieBloc.add(SearchMovieEvent(movieName: "Matrix"));
 
     return Scaffold(
         body: NestedScrollView(
@@ -93,8 +93,9 @@ class _MoviePageState extends State<MoviePage> {
                       ),
                       prefix: Padding(
                         padding: const EdgeInsets.fromLTRB(9.0, 6.0, 9.0, 6.0),
-                        child: Icon(
-                          Icons.search,
+                        child: IconButton(
+                          icon: Icon(Icons.search),
+                          onPressed: (){print("Searching... $_filter");},
                         ),
                       ),
                       decoration: BoxDecoration(
@@ -133,26 +134,26 @@ class _MoviePageState extends State<MoviePage> {
     // ignore: close_sinks
     final _movieBloc = BlocProvider.of<MovieBloc>(context);
 
-    _movieBloc.add(FetchMovieEvent(movieName: "matrix"));
+    _movieBloc.add(SearchMovieEvent(movieName: "matrix"));
     return BlocBuilder(
         cubit: _movieBloc,
         builder: (context, state) {
           debugPrint("State: $state");
           if (state is MovieInitialState) {
           //  return Center(child: Text("Initial"));
-            return Center(child: Text("Initial"));
+            return Center(child: CircularProgressIndicator());
           }
 
-          if (state is MovieLoadingState) {
-            return Center(child: Text("Loading")
+          if (state is MovieSearchingState) {
+            return Center(child:CircularProgressIndicator());
 
                 /*Lottie.asset(
               'assets/animations/loading_electricity.json',
               repeat: true,*/
-                );
+
           }
 
-          if (state is MovieErrorState) {
+          if (state is MovieSearchErrorState) {
             return Container(child: Text(state.errorText),);
             /*     AlertDialog(
                 title: "Error",
@@ -162,13 +163,11 @@ class _MoviePageState extends State<MoviePage> {
           );*/
           }
 
-          if (state is MovieLoadedState) {
-            //var movieTitle = state.movie.title;
-            List<Movie> movie = state.movieList;
-            for(int i=0; i<=movie.length; i++ ){
-              debugPrint("Movie Screen => Movie Loaded "+movie[i].toString());
-            }
-            return Container();
+          if (state is MovieSearchSuccessState) {
+            List<Movie> movieList = state.movieList;
+            for(int i=0; i<=movieList.length; i++ ){
+              debugPrint("Movie Screen => Movie Loaded "+movieList[i].toString());
+            }            return Container();
             /*     final meterCardDataList = state.meterCardDataList;
           print("Meter Screen => Getting Card Data List :" +
               meterCardDataList.toString());

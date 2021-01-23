@@ -22,13 +22,13 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
 
   @override
   Stream<MovieState> mapEventToState(MovieEvent event) async* {
-    if (event is FetchMovieEvent) {
-      yield MovieLoadingState();
+    if (event is SearchMovieEvent) {
+      yield MovieSearchingState();
       try {
-        final List<Movie> movie = await movieRepository.getMovies(event.movieName);
-        yield MovieLoadedState(movieList: movie);
+        final List<Movie> movieList = await movieRepository.getMovies(event.movieName);
+        yield MovieSearchSuccessState(movieList: movieList);
       } catch (e) {
-        yield MovieErrorState(errorText: e.toString());
+        yield MovieSearchErrorState(errorText: e.toString());
       }
     }
   }

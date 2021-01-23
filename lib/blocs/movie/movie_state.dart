@@ -8,24 +8,63 @@ class MovieInitialState extends MovieState {
   @override
   List<Object> get props => [];
 }
-class MovieLoadingState extends MovieState{
+
+class MovieSearchingState extends MovieState {
   @override
   List<Object> get props => [];
 }
-class MovieLoadedState extends MovieState{
+
+class MovieSearchSuccessState extends MovieState {
   final List<Movie> movieList;
 
-  MovieLoadedState({@required this.movieList});
+  MovieSearchSuccessState({@required this.movieList});
 
   @override
   List<Object> get props => [this.movieList];
 }
 
-class MovieErrorState extends MovieState{
+class MovieSearchErrorState extends MovieState {
   final errorText;
 
-  MovieErrorState({@required this.errorText});
+  MovieSearchErrorState({@required this.errorText});
 
   @override
   List<Object> get props => [this.errorText];
+}
+
+class AddFavoriteSuccessState extends MovieState {
+  final Movie movie;
+
+  AddFavoriteSuccessState({@required this.movie});
+
+  @override
+  List<Object> get props => [this.movie];
+}
+
+class AddFavoriteErrorState extends MovieState {
+  final errorText;
+
+  AddFavoriteErrorState({@required this.errorText});
+
+  @override
+  List<Object> get props => [this.errorText];
+}
+
+class RemoveFavoriteSuccessState extends MovieState {
+  final Movie movie;
+
+  RemoveFavoriteSuccessState({@required this.movie});
+
+  @override
+  List<Object> get props => [this.movie];
+}
+
+class RemoveFavoriteErrorState extends MovieState {
+  // final Movie movie;
+  final int movieIndex;
+
+  RemoveFavoriteErrorState({@required this.movieIndex});
+
+  @override
+  List<Object> get props => [this.movieIndex];
 }
