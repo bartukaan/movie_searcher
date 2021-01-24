@@ -44,7 +44,7 @@ class AppBarSearchScreen extends SearchDelegate<String> {
         cubit: movieBloc,
         builder: (context, state) {
           debugPrint("State: $state");
-          if (state is MovieInitialState) {
+          if (state is MovieSearchInitialState) {
             return Center(child: Text("Initial"));
           }
           if (state is MovieSearchingState) {

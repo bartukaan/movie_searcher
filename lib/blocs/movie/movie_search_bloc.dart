@@ -15,10 +15,10 @@ part 'movie_search_state.dart';
 class MovieSearchBloc extends Bloc<MovieSearchEvent, MovieSearchState> {
   final MovieRepository movieRepository = getIt<MovieRepository>();
 
-  MovieSearchBloc() : super(MovieInitialState());
+  MovieSearchBloc() : super(MovieSearchInitialState());
 
   @override
-  MovieSearchState get initialState => MovieInitialState();
+  MovieSearchState get initialState => MovieSearchInitialState();
 
   @override
   Stream<MovieSearchState> mapEventToState(MovieSearchEvent event) async* {

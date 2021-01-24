@@ -21,7 +21,9 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: BlocProvider<MovieSearchBloc>(
-          create: (context) => MovieSearchBloc(), child: MainSearchScreen()),
+        create: (context) => MovieSearchBloc(),
+        child: MainSearchScreen(),
+      ),
     );
   }
 }

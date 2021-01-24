@@ -4,7 +4,7 @@ abstract class MovieSearchState extends Equatable {
   const MovieSearchState();
 }
 
-class MovieInitialState extends MovieSearchState {
+class MovieSearchInitialState extends MovieSearchState {
   @override
   List<Object> get props => [];
 }
@@ -32,7 +32,7 @@ class MovieSearchErrorState extends MovieSearchState {
   List<Object> get props => [this.errorText];
 }
 
-class AddFavoriteSuccessState extends MovieSearchState {
+/*class AddFavoriteSuccessState extends MovieSearchState {
   final Movie movie;
 
   AddFavoriteSuccessState({@required this.movie});
@@ -67,4 +67,4 @@ class RemoveFavoriteErrorState extends MovieSearchState {
 
   @override
   List<Object> get props => [this.movieIndex];
-}
+}*/
