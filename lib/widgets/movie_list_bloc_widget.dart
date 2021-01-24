@@ -5,7 +5,7 @@ import 'package:movie_app/models/movie_model.dart';
 import 'package:movie_app/widgets/movie_list_widget.dart';
 
 // ignore: must_be_immutable
-class MovieListBloc extends StatelessWidget {
+class MovieListViaBloc extends StatelessWidget {
   // ignore: close_sinks
   Bloc<MovieSearchEvent, MovieSearchState> movieBloc;
 
@@ -28,12 +28,11 @@ class MovieListBloc extends StatelessWidget {
         }
 
         if (state is MovieSearchingState) {
-          return Column(
-            children: [
-              Center(
-                child: CircularProgressIndicator(),
-              )
-            ],
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Center(
+              child: CircularProgressIndicator(),
+            ),
           );
         }
 

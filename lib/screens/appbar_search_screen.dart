@@ -40,32 +40,52 @@ class AppBarSearchScreen extends SearchDelegate<String> {
   @override
   Widget buildResults(BuildContext context) {
     movieBloc.add(SearchMovieEvent(movieName: query));
-    return BlocBuilder(
-        cubit: movieBloc,
-        builder: (context, state) {
-          debugPrint("State: $state");
-          if (state is MovieSearchInitialState) {
-            return Center(child: Text("Initial"));
-          }
-          if (state is MovieSearchingState) {
-            return Center(child: CircularProgressIndicator());
-          }
-          if (state is MovieSearchErrorState) {
-            print("Error:" + state.errorText);
-            if (state.errorText.toString().contains("null")) {
-              return Container(
-                child: Center(child: Text("Please Enter a Movie Name")),
-              );
-            }
-          }
-          if (state is MovieSearchSuccessState) {
-            List<Movie> movieList = state.movieList;
+    return BlocBuilder<MovieSearchBloc, MovieSearchState>(
+      cubit: movieBloc,
+      builder: (context, state) {
+        debugPrint("State: $state");
+        if (state is MovieSearchInitialState) {
+          return Center(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  "Search for movies",
+                  style: TextStyle(fontSize: 15, color: Colors.white),
+                ),
+              ));
+        }
 
-            return _buildMovieList(movieList);
-          } else {
-            return Container(child: Text("Search Movie"),);
-          }
-        });
+        if (state is MovieSearchingState) {
+          return Column(
+            children: [
+              Center(
+                child: CircularProgressIndicator(),
+              )
+            ],
+          );
+        }
+
+        if (state is MovieSearchErrorState) {
+          print("Error:" + state.errorText);
+          return Center(
+            child: Text("Opps! something went wrong, try again...",style: TextStyle(color: Colors.white70,fontSize: 12),),
+          );
+        }
+
+        if (state is MovieSearchSuccessState) {
+          List<Movie> movieList = state.movieList;
+          return Expanded(
+              child: Container(child: _buildMovieList(movieList)));
+        } else {
+          return Center(
+            child: Text(
+              "Search Movie",
+              style: TextStyle(fontSize: 25, color: Colors.white),
+            ),
+          );
+        }
+      },
+    );
   }
 
   @override
@@ -92,85 +112,82 @@ class AppBarSearchScreen extends SearchDelegate<String> {
       shrinkWrap: true,
       itemCount: movieList.length,
       gridDelegate:
-          SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+          SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,childAspectRatio: 2/4),
       itemBuilder: (BuildContext context, int index) {
-        return GestureDetector(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Material(
-              borderRadius: BorderRadius.circular(16),
-              //elevation: 1,
-              color: Colors.grey.shade300,
-
-              child: StatefulBuilder(
-                  builder: (BuildContext context, StateSetter setState) {
-                return Container(
-                  decoration:
-                      BoxDecoration(borderRadius: BorderRadius.circular(20)),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          isAddedList
-                              ? FlatButton.icon(
-                                  onPressed: () {
-                                    MainSearchScreen.favoriteMovies.remove(movieList[index]);
-                                    setState(() {
-                                      isAddedList = !isAddedList;
-                                    });
-                                  },
-                                  icon: Icon(
-                                    Icons.favorite,
-                                    color: Colors.red,
-                                    size: 30,
-                                  ),
-                                  label: Text("Added to Favorites"),
-                                )
-                              : FlatButton.icon(
-                                  onPressed: () {
-                                    MainSearchScreen.favoriteMovies.add(movieList[index]);
-                                    setState(() {
-                                      isAddedList = !isAddedList;
-                                    });
-                                  },
-                                  icon: Icon(
-                                    Icons.favorite,
-                                    size: 30,
-                                  ),
-                                  label: Text("Add Favorite"),
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Material(
+            borderRadius: BorderRadius.circular(16),
+            //elevation: 1,
+            color: Colors.grey.shade300,
+            child: StatefulBuilder(
+                builder: (BuildContext context, StateSetter setState) {
+              return Container(
+                decoration:
+                    BoxDecoration(borderRadius: BorderRadius.circular(2)),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        isAddedList
+                            ? FlatButton.icon(
+                                onPressed: () {
+                                  MainSearchScreen.favoriteMovies.remove(movieList[index]);
+                                  setState(() {
+                                    isAddedList = !isAddedList;
+                                  });
+                                },
+                                icon: Icon(
+                                  Icons.favorite,
+                                  color: Colors.red,
+                                  size: 30,
                                 ),
-                        ],
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Center(
-                          child: Text(
-                            movieList[index].title,
-                            style: TextStyle(
-                                fontSize: 14, fontWeight: FontWeight.bold),
-                          ),
+                                label: Text("Added to Favorite"),
+                              )
+                            : FlatButton.icon(
+                                onPressed: () {
+                                  MainSearchScreen.favoriteMovies.add(movieList[index]);
+                                  setState(() {
+                                    isAddedList = !isAddedList;
+                                  });
+                                },
+                                icon: Icon(
+                                  Icons.favorite,
+                                  size: 30,
+                                ),
+                                label: Text("Add Favorite"),
+                              ),
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(3.0),
+                      child: Center(
+                        child: Text(
+                          movieList[index].title,
+                          style: TextStyle(
+                              fontSize: 10, fontWeight: FontWeight.bold),
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Center(
-                            child: Text(movieList[index].year,
-                                style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold))),
-                      ),
-                      /*  Card(
-                        color: Colors.transparent,*/
-                      Container(
-                        width: 100, //MediaQuery.of(context).size.width,
-                        height: 250, //MediaQuery.of(context).size.height,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(3.0),
+                      child: Center(
+                          child: Text(movieList[index].year,
+                              style: TextStyle(
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.bold))),
+                    ),
+                    /*  Card(
+                      color: Colors.transparent,*/
+                    Expanded(
+                      child: Container(
                         decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(5),
+                            borderRadius: BorderRadius.circular(2),
                             image: DecorationImage(
                                 image: NetworkImage(movieList[index].poster),
-                                fit: BoxFit.fitHeight)),
+                                fit: BoxFit.cover)),
                         /*child: Column(
                           children: [
                             Text("TYPE:" + movieList[index].type.toString()),
@@ -178,18 +195,13 @@ class AppBarSearchScreen extends SearchDelegate<String> {
                           ],
                         ),*/
                       ),
-                      // ),
-                    ],
-                  ),
-                );
-              }),
-            ),
+                    ),
+                    // ),
+                  ],
+                ),
+              );
+            }),
           ),
-          onTap: () => debugPrint("Movie $index tıklanıldı"),
-          onDoubleTap: () => debugPrint("Movie $index çift tıklanıldı"),
-          onLongPress: () => debugPrint("Movie $index uzun basıldı"),
-          onHorizontalDragStart: (e) =>
-              debugPrint("Movie $index uzun basıldı $e"),
         );
       },
     );

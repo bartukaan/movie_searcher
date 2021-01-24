@@ -4,7 +4,8 @@ import 'package:form_validator/form_validator.dart';
 import 'package:movie_app/blocs/movie/movie_search_bloc.dart';
 import 'package:movie_app/models/movie_model.dart';
 import 'package:movie_app/screens/favorite_movie_list.dart';
-import 'package:movie_app/screens/movie_list_bloc_screen.dart';
+import 'package:movie_app/widgets/movie_list_bloc_widget.dart';
+
 
 import 'appbar_search_screen.dart';
 
@@ -63,7 +64,7 @@ class _MainSearchScreenState extends State<MainSearchScreen> {
             padding: const EdgeInsets.all(8.0),
             child: Container(height: 100, child: _searchBarWidget()),
           ),
-          MovieListBloc(),
+          MovieListViaBloc(),
         ],
       ),
     );
