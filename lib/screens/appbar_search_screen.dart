@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movie_app/blocs/movie/movie_search_bloc.dart';
 import 'package:movie_app/models/movie_model.dart';
+import 'package:movie_app/screens/main_search_screen.dart';
 
 class AppBarSearchScreen extends SearchDelegate<String> {
-  static final List<Movie> favoriteMovies = [];
   final recentSearchingMovies = [
     "Matrix",
     "Lord of the Rings",
@@ -116,7 +116,7 @@ class AppBarSearchScreen extends SearchDelegate<String> {
                           isAddedList
                               ? FlatButton.icon(
                                   onPressed: () {
-                                    favoriteMovies.remove(movieList[index]);
+                                    MainSearchScreen.favoriteMovies.remove(movieList[index]);
                                     setState(() {
                                       isAddedList = !isAddedList;
                                     });
@@ -130,7 +130,7 @@ class AppBarSearchScreen extends SearchDelegate<String> {
                                 )
                               : FlatButton.icon(
                                   onPressed: () {
-                                    favoriteMovies.add(movieList[index]);
+                                    MainSearchScreen.favoriteMovies.add(movieList[index]);
                                     setState(() {
                                       isAddedList = !isAddedList;
                                     });
