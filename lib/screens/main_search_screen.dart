@@ -5,7 +5,6 @@ import 'package:movie_app/blocs/movie/movie_search_bloc.dart';
 import 'package:movie_app/models/movie_model.dart';
 import 'package:movie_app/screens/favorite_movie_list.dart';
 import 'package:movie_app/screens/movie_list_bloc_screen.dart';
-import 'package:movie_app/widgets/movie_list_widget.dart';
 
 import 'appbar_search_screen.dart';
 
@@ -17,12 +16,10 @@ class MainSearchScreen extends StatefulWidget {
 }
 
 class _MainSearchScreenState extends State<MainSearchScreen> {
- final _formKey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
 
   TextEditingController _textController;
   String _movieName;
-
- // _MainSearchScreenState({this.movieBloc});
 
   @override
   void initState() {
@@ -31,7 +28,6 @@ class _MainSearchScreenState extends State<MainSearchScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: Color(0xFF00385d),
       appBar: AppBar(
@@ -45,7 +41,7 @@ class _MainSearchScreenState extends State<MainSearchScreen> {
             color: Colors.white,
           ),
           label: Text(
-            "Go to My Favorite Movies",
+            "Favorite movies",
             style: TextStyle(color: Colors.white),
           ),
         ),
@@ -63,115 +59,25 @@ class _MainSearchScreenState extends State<MainSearchScreen> {
       ),
       body: Column(
         children: [
-          Container(height: 100, child: _searchBarWidget()),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(height: 100, child: _searchBarWidget()),
+          ),
           MovieListBloc(),
-
         ],
       ),
     );
   }
 
-  /*
-  BlocListener<MovieSearchBloc, MovieSearchState>(
-              //  cubit: movieBloc,
-              listener: (context, state) {
-                debugPrint("State: $state");
-                if (state is MovieInitialState) {
-                  // return _searchBarWidget(movieBloc);
-                  return Center(
-                    child: Text(
-                      "Search Movie",
-                      style: TextStyle(fontSize: 25, color: Colors.white),
-                    ),
-                  );
-                }
-                if (state is MovieSearchingState) {
-                  return Container(
-                      child: Center(
-                    child: CircularProgressIndicator(),
-                  ));
-                }
-                if (state is MovieSearchErrorState) {
-                  debugPrint("Error:" + state.errorText);
-                  if (state.errorText.toString().contains("null")) {
-                    return Container(
-                      child: Center(child: Text("Please Enter a Movie Name")),
-                    );
-                  }
-                }
-                if (state is MovieSearchSuccessState) {
-                  List<Movie> movieList = state.movieList;
-                  return Container(
-                      child: Expanded(
-                          child: Column(
-                    children: [
-                      Container(child: _searchBarWidget(movieBloc)),
-                      MovieList(movieList: movieList)
-                    ],
-                  )));
-                  // return MovieList(movieList: movieList);
-                } else {
-                  //return _searchBarWidget(movieBloc);
-                  return Container(
-                      child: Center(
-                    child: Text(
-                      "Search Movie",
-                      style: TextStyle(fontSize: 25, color: Colors.white),
-                    ),
-                  ));
-                }
-              },
-            )
-*/
-
-/*
-BlocBuilder(
-      cubit: movieBloc,
-      builder: (context, state) {
-        debugPrint("State: $state");
-        if (state is MovieInitialState) {
-          //return Center(child: Text("Initial"));
-
-          return _searchBarWidget(movieBloc);
-        }
-
-        if (state is MovieSearchingState) {
-          return Column(
-            children: [
-              _searchBarWidget(movieBloc),
-              Center(
-                child: CircularProgressIndicator(),
-              )
-            ],
-          );
-        }
-        if (state is MovieSearchErrorState) {
-          print("Error:" + state.errorText);
-          if (state.errorText.toString().contains("null")) {
-            return Container(
-              child: Center(child: Text("Please Enter a Movie Name")),
-            );
-          }
-        }
-        if (state is MovieSearchSuccessState) {
-          List<Movie> movieList = state.movieList;
-          return MovieList(movieList: movieList);
-        } else {
-          return _searchBarWidget(movieBloc);
-        }
-      },
-    ),
- */
-
   @override
   void dispose() {
     _textController.dispose();
-
     super.dispose();
   }
 
   Widget _searchBarWidget() {
     return Container(
+      height: MediaQuery.of(context).size.height * 0.1,
       child: Form(
         key: _formKey,
         child: Row(
@@ -180,7 +86,7 @@ BlocBuilder(
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Container(
-                width: MediaQuery.of(context).size.width * 0.9,
+                width: MediaQuery.of(context).size.width * 0.75,
                 decoration: BoxDecoration(
                   color: Colors.black12,
                   borderRadius: BorderRadius.circular(10.0),
@@ -198,7 +104,7 @@ BlocBuilder(
                     controller: _textController,
                     validator: ValidationBuilder()
                         .required("Movie name is required.")
-                        .minLength(2, "Please enter a movie name")
+                        .minLength(2, "Please type a movie name")
                         .build(),
                     onSaved: (text) {
                       _movieName = text;
@@ -216,12 +122,12 @@ BlocBuilder(
                         Icons.movie_outlined,
                         color: Colors.white,
                       ),
-                      hintText: 'Enter a movie name',
+                      hintText: 'Start typing a movie name...',
                       hintStyle: TextStyle(
                         color: Colors.white54,
                         fontFamily: 'OpenSans',
                       ),
-                      labelText: "Movie Name",
+                      labelText: "Movie name",
                       labelStyle: TextStyle(
                         color: Colors.white54,
                         fontFamily: 'OpenSans',
@@ -237,11 +143,11 @@ BlocBuilder(
                   color: Colors.white,
                 ),
                 onPressed: () {
-                  // _searchPressed();
                   if (_formKey.currentState.validate()) {
                     _formKey.currentState.save();
-                 // ignore: close_sinks
-                 MovieSearchBloc movieBloc = BlocProvider.of<MovieSearchBloc>(context);
+                    // ignore: close_sinks
+                    MovieSearchBloc movieBloc =
+                        BlocProvider.of<MovieSearchBloc>(context);
                     movieBloc.add(SearchMovieEvent(movieName: _movieName));
                   }
                 }),

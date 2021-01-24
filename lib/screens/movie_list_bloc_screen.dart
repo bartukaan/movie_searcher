@@ -4,6 +4,7 @@ import 'package:movie_app/blocs/movie/movie_search_bloc.dart';
 import 'package:movie_app/models/movie_model.dart';
 import 'package:movie_app/widgets/movie_list_widget.dart';
 
+// ignore: must_be_immutable
 class MovieListBloc extends StatelessWidget {
   // ignore: close_sinks
   Bloc<MovieSearchEvent, MovieSearchState> movieBloc;
@@ -17,8 +18,13 @@ class MovieListBloc extends StatelessWidget {
         debugPrint("State: $state");
         if (state is MovieSearchInitialState) {
           return Center(
-            child: Text("Serch Movie"),
-          );
+              child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              "Search for movies",
+              style: TextStyle(fontSize: 15, color: Colors.white),
+            ),
+          ));
         }
 
         if (state is MovieSearchingState) {
@@ -33,11 +39,9 @@ class MovieListBloc extends StatelessWidget {
 
         if (state is MovieSearchErrorState) {
           print("Error:" + state.errorText);
-          if (state.errorText.toString().contains("null")) {
-            return Container(
-              child: Center(child: Text("Please Enter a Movie Name")),
-            );
-          }
+          return Center(
+            child: Text("Opps! something went wrong, try again...",style: TextStyle(color: Colors.white70,fontSize: 12),),
+          );
         }
 
         if (state is MovieSearchSuccessState) {
@@ -46,7 +50,10 @@ class MovieListBloc extends StatelessWidget {
               child: Container(child: MovieList(movieList: movieList)));
         } else {
           return Center(
-            child: Text("Search Movie"),
+            child: Text(
+              "Search Movie",
+              style: TextStyle(fontSize: 25, color: Colors.white),
+            ),
           );
         }
       },
