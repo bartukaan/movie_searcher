@@ -47,12 +47,12 @@ class AppBarSearchScreen extends SearchDelegate<String> {
         if (state is MovieSearchInitialState) {
           return Center(
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  "Search for movies",
-                  style: TextStyle(fontSize: 15, color: Colors.white),
-                ),
-              ));
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              "Search for movies",
+              style: TextStyle(fontSize: 15, color: Colors.white),
+            ),
+          ));
         }
 
         if (state is MovieSearchingState) {
@@ -68,14 +68,16 @@ class AppBarSearchScreen extends SearchDelegate<String> {
         if (state is MovieSearchErrorState) {
           print("Error:" + state.errorText);
           return Center(
-            child: Text("Opps! something went wrong, try again...",style: TextStyle(color: Colors.white70,fontSize: 12),),
+            child: Text(
+              "Opps! something went wrong, try again...",
+              style: TextStyle(color: Colors.white70, fontSize: 12),
+            ),
           );
         }
 
         if (state is MovieSearchSuccessState) {
           List<Movie> movieList = state.movieList;
-          return Expanded(
-              child: Container(child: _buildMovieList(movieList)));
+          return Expanded(child: Container(child: _buildMovieList(movieList)));
         } else {
           return Center(
             child: Text(
@@ -111,8 +113,8 @@ class AppBarSearchScreen extends SearchDelegate<String> {
     return GridView.builder(
       shrinkWrap: true,
       itemCount: movieList.length,
-      gridDelegate:
-          SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,childAspectRatio: 2/4),
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2, childAspectRatio: 2 / 4),
       itemBuilder: (BuildContext context, int index) {
         return Padding(
           padding: const EdgeInsets.all(8.0),
@@ -134,7 +136,8 @@ class AppBarSearchScreen extends SearchDelegate<String> {
                         isAddedList
                             ? FlatButton.icon(
                                 onPressed: () {
-                                  MainSearchScreen.favoriteMovies.remove(movieList[index]);
+                                  MainSearchScreen.favoriteMovies
+                                      .remove(movieList[index]);
                                   setState(() {
                                     isAddedList = !isAddedList;
                                   });
@@ -148,7 +151,8 @@ class AppBarSearchScreen extends SearchDelegate<String> {
                               )
                             : FlatButton.icon(
                                 onPressed: () {
-                                  MainSearchScreen.favoriteMovies.add(movieList[index]);
+                                  MainSearchScreen.favoriteMovies
+                                      .add(movieList[index]);
                                   setState(() {
                                     isAddedList = !isAddedList;
                                   });
@@ -176,11 +180,8 @@ class AppBarSearchScreen extends SearchDelegate<String> {
                       child: Center(
                           child: Text(movieList[index].year,
                               style: TextStyle(
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.bold))),
+                                  fontSize: 10, fontWeight: FontWeight.bold))),
                     ),
-                    /*  Card(
-                      color: Colors.transparent,*/
                     Expanded(
                       child: Container(
                         decoration: BoxDecoration(
@@ -196,7 +197,6 @@ class AppBarSearchScreen extends SearchDelegate<String> {
                         ),*/
                       ),
                     ),
-                    // ),
                   ],
                 ),
               );
