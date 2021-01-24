@@ -73,9 +73,9 @@ class _MainSearchScreenState extends State<MainSearchScreen> {
         children: [
           Expanded(child: Container(child: _searchBarWidget(movieBloc))),
           Expanded(
-            child: BlocListener<MovieSearchBloc,MovieSearchState>(
-             // cubit: movieBloc,
-              listener: (context, state)
+            child: BlocBuilder<MovieSearchBloc,MovieSearchState>(
+             cubit: movieBloc,
+              builder: (context, state)
 
               {
 

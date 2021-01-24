@@ -63,7 +63,7 @@ class AppBarSearchScreen extends SearchDelegate<String> {
 
             return _buildMovieList(movieList);
           } else {
-            return Container();
+            return Container(child: Text("Search Movie"),);
           }
         });
   }
