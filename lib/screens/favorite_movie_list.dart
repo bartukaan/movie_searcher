@@ -12,7 +12,6 @@ class _FavoriteMovieListState extends State<FavoriteMovieList> {
 
   @override
   void initState() {
-    //favoriteMovieList = MovieSearch.favoriteMovies;
     favoriteMovieList = MainSearchScreen.favoriteMovies;
     super.initState();
   }

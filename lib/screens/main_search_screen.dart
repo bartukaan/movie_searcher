@@ -16,7 +16,7 @@ class MainSearchScreen extends StatefulWidget {
 }
 
 class _MainSearchScreenState extends State<MainSearchScreen> {
-  Bloc<MovieEvent, MovieState> movieBloc;
+  Bloc<MovieSearchEvent, MovieSearchState> movieBloc;
 
   TextEditingController _textController;
 //  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -64,38 +64,38 @@ class _MainSearchScreenState extends State<MainSearchScreen> {
            _searchBarWidget(movieBloc),
 
           Expanded(
-            child: BlocBuilder(
-              cubit: movieBloc,
-              builder: (context, state) {
+            child: BlocListener<MovieSearchBloc,MovieSearchState>(
+            //  cubit: movieBloc,
+              listener: (context, state) {
                 debugPrint("State: $state");
-                if (state is MovieInitialState) {
-                  return _searchBarWidget(movieBloc);
-                }
+               if (state is MovieInitialState) {
+                 // return _searchBarWidget(movieBloc);
+                  return Center(child: Text("Search Movie",style: TextStyle(fontSize: 25,color: Colors.white),),);
+                }else if (state is MovieSearchingState) {
 
-                if (state is MovieSearchingState) {
-                  return Column(
+                 return Container(child: Center(child: CircularProgressIndicator(),));
+               /*   return Column(
                     children: [
                       _searchBarWidget(movieBloc),
                       Center(
                         child: CircularProgressIndicator(),
                       )
                     ],
-                  );
-                }
-                if (state is MovieSearchErrorState) {
-                  print("Error:" + state.errorText);
+                  );*/
+                } else  if (state is MovieSearchErrorState) {
+                  debugPrint("Error:" + state.errorText);
                   if (state.errorText.toString().contains("null")) {
                     return Container(
                       child: Center(child: Text("Please Enter a Movie Name")),
                     );
                   }
-                }
-                if (state is MovieSearchSuccessState) {
+                }else  if (state is MovieSearchSuccessState) {
                   List<Movie> movieList = state.movieList;
-                  //return Container(child: Expanded(child: Column(children: [Container(child: _searchBarWidget(movieBloc)),MovieList(movieList: movieList)],)));
-                  return MovieList(movieList: movieList);
+                  return Container(child: Expanded(child: Column(children: [Container(child: _searchBarWidget(movieBloc)),MovieList(movieList: movieList)],)));
+                 // return MovieList(movieList: movieList);
                 } else {
-                  return _searchBarWidget(movieBloc);
+                  //return _searchBarWidget(movieBloc);
+                  return Container(child: Center(child: Text("Search Movie",style: TextStyle(fontSize: 25,color: Colors.white),),));
                 }
               },
             ),

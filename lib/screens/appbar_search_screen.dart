@@ -17,7 +17,7 @@ class AppBarSearchScreen extends SearchDelegate<String> {
     "Shawshank Redemption"
   ];
 
-  final Bloc<MovieEvent, MovieState> movieBloc;
+  final Bloc<MovieSearchEvent, MovieSearchState> movieBloc;
 
   AppBarSearchScreen({@required this.movieBloc});
 

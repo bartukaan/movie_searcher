@@ -1,20 +1,20 @@
 part of 'movie_search_bloc.dart';
 
-abstract class MovieState extends Equatable {
-  const MovieState();
+abstract class MovieSearchState extends Equatable {
+  const MovieSearchState();
 }
 
-class MovieInitialState extends MovieState {
+class MovieInitialState extends MovieSearchState {
   @override
   List<Object> get props => [];
 }
 
-class MovieSearchingState extends MovieState {
+class MovieSearchingState extends MovieSearchState {
   @override
   List<Object> get props => [];
 }
 
-class MovieSearchSuccessState extends MovieState {
+class MovieSearchSuccessState extends MovieSearchState {
   final List<Movie> movieList;
 
   MovieSearchSuccessState({@required this.movieList});
@@ -23,7 +23,7 @@ class MovieSearchSuccessState extends MovieState {
   List<Object> get props => [this.movieList];
 }
 
-class MovieSearchErrorState extends MovieState {
+class MovieSearchErrorState extends MovieSearchState {
   final errorText;
 
   MovieSearchErrorState({@required this.errorText});
@@ -32,7 +32,7 @@ class MovieSearchErrorState extends MovieState {
   List<Object> get props => [this.errorText];
 }
 
-class AddFavoriteSuccessState extends MovieState {
+class AddFavoriteSuccessState extends MovieSearchState {
   final Movie movie;
 
   AddFavoriteSuccessState({@required this.movie});
@@ -41,7 +41,7 @@ class AddFavoriteSuccessState extends MovieState {
   List<Object> get props => [this.movie];
 }
 
-class AddFavoriteErrorState extends MovieState {
+class AddFavoriteErrorState extends MovieSearchState {
   final errorText;
 
   AddFavoriteErrorState({@required this.errorText});
@@ -50,7 +50,7 @@ class AddFavoriteErrorState extends MovieState {
   List<Object> get props => [this.errorText];
 }
 
-class RemoveFavoriteSuccessState extends MovieState {
+class RemoveFavoriteSuccessState extends MovieSearchState {
   final Movie movie;
 
   RemoveFavoriteSuccessState({@required this.movie});
@@ -59,7 +59,7 @@ class RemoveFavoriteSuccessState extends MovieState {
   List<Object> get props => [this.movie];
 }
 
-class RemoveFavoriteErrorState extends MovieState {
+class RemoveFavoriteErrorState extends MovieSearchState {
   // final Movie movie;
   final int movieIndex;
 
