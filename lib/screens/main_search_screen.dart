@@ -22,21 +22,19 @@ class _MainSearchScreenState extends State<MainSearchScreen> {
 
   _MainSearchScreenState({this.movieBloc});
 
-@override
+  @override
   void initState() {
     // TODO: implement initState
     super.initState();
-
   }
+
   @override
   Widget build(BuildContext context) {
-
     movieBloc = BlocProvider.of<MovieSearchBloc>(context);
 
-   // movieBloc.add(SearchMovieEvent(movieName: "matrix"));
+    // movieBloc.add(SearchMovieEvent(movieName: "matrix"));
 
     print(movieBloc.state);
-
 
     return Scaffold(
       backgroundColor: Color(0xFF00385d),
@@ -67,61 +65,48 @@ class _MainSearchScreenState extends State<MainSearchScreen> {
           ),
         ],
       ),
-      body:
-
-      Column(
+      body: Column(
         children: [
-          Expanded(child: Container(child: _searchBarWidget(movieBloc))),
-          Expanded(
-            child: BlocBuilder<MovieSearchBloc,MovieSearchState>(
-             cubit: movieBloc,
-              builder: (context, state)
-
-              {
-
-                debugPrint("State: $state");
-
-                if (state is MovieSearchInitialState) {
-                  //return Center(child: Text("Initial"));
-
-                  return Center(child: Text("Serch Movie"),);
-                }
-
-
-                if (state is MovieSearchingState) {
-                  return Column(
-                    children: [
-                      _searchBarWidget(movieBloc),
-                      Center(
-                        child: CircularProgressIndicator(),
-                      )
-                    ],
+          Container(height: 100, child: _searchBarWidget(movieBloc)),
+          BlocBuilder<MovieSearchBloc, MovieSearchState>(
+            cubit: movieBloc,
+            builder: (context, state) {
+              debugPrint("State: $state");
+              if (state is MovieSearchInitialState) {
+                return Center(
+                  child: Text("Serch Movie"),
+                );
+              }
+              
+              if (state is MovieSearchingState) {
+                return Column(
+                  children: [
+                    _searchBarWidget(movieBloc),
+                    Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  ],
+                );
+              }
+              
+              if (state is MovieSearchErrorState) {
+                print("Error:" + state.errorText);
+                if (state.errorText.toString().contains("null")) {
+                  return Container(
+                    child: Center(child: Text("Please Enter a Movie Name")),
                   );
                 }
+              }
 
-
-                if (state is MovieSearchErrorState) {
-                  print("Error:" + state.errorText);
-                  if (state.errorText.toString().contains("null")) {
-                    return Container(
-                      child: Center(child: Text("Please Enter a Movie Name")),
-                    );
-                  }
-                }
-
-
-                if (state is MovieSearchSuccessState) {
-                  List<Movie> movieList = state.movieList;
-                  return MovieList(movieList: movieList);
-                }
-
-
-               else {
-                 // return _searchBarWidget(movieBloc);
-                  return Center(child: Text("Test"),);
-                }
-              },
-            ),
+              if (state is MovieSearchSuccessState) {
+                List<Movie> movieList = state.movieList;
+                return Expanded(child: MovieList(movieList: movieList));
+              } else {
+                return Center(
+                  child: Text("Search Movie"),
+                );
+              }
+            },
           ),
         ],
       ),
