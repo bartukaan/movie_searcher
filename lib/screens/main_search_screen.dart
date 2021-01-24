@@ -4,6 +4,7 @@ import 'package:form_validator/form_validator.dart';
 import 'package:movie_app/blocs/movie/movie_search_bloc.dart';
 import 'package:movie_app/models/movie_model.dart';
 import 'package:movie_app/screens/favorite_movie_list.dart';
+import 'package:movie_app/screens/movie_list_bloc_screen.dart';
 import 'package:movie_app/widgets/movie_list_widget.dart';
 
 import 'appbar_search_screen.dart';
@@ -16,25 +17,20 @@ class MainSearchScreen extends StatefulWidget {
 }
 
 class _MainSearchScreenState extends State<MainSearchScreen> {
-  Bloc<MovieSearchEvent, MovieSearchState> movieBloc;
+ final _formKey = GlobalKey<FormState>();
+
   TextEditingController _textController;
   String _movieName;
 
-  _MainSearchScreenState({this.movieBloc});
+ // _MainSearchScreenState({this.movieBloc});
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    movieBloc = BlocProvider.of<MovieSearchBloc>(context);
-
-    // movieBloc.add(SearchMovieEvent(movieName: "matrix"));
-
-    print(movieBloc.state);
 
     return Scaffold(
       backgroundColor: Color(0xFF00385d),
@@ -67,47 +63,9 @@ class _MainSearchScreenState extends State<MainSearchScreen> {
       ),
       body: Column(
         children: [
-          Container(height: 100, child: _searchBarWidget(movieBloc)),
-          BlocBuilder<MovieSearchBloc, MovieSearchState>(
-            cubit: movieBloc,
-            builder: (context, state) {
-              debugPrint("State: $state");
-              if (state is MovieSearchInitialState) {
-                return Center(
-                  child: Text("Serch Movie"),
-                );
-              }
-              
-              if (state is MovieSearchingState) {
-                return Column(
-                  children: [
-                    _searchBarWidget(movieBloc),
-                    Center(
-                      child: CircularProgressIndicator(),
-                    )
-                  ],
-                );
-              }
-              
-              if (state is MovieSearchErrorState) {
-                print("Error:" + state.errorText);
-                if (state.errorText.toString().contains("null")) {
-                  return Container(
-                    child: Center(child: Text("Please Enter a Movie Name")),
-                  );
-                }
-              }
+          Container(height: 100, child: _searchBarWidget()),
+          MovieListBloc(),
 
-              if (state is MovieSearchSuccessState) {
-                List<Movie> movieList = state.movieList;
-                return Expanded(child: MovieList(movieList: movieList));
-              } else {
-                return Center(
-                  child: Text("Search Movie"),
-                );
-              }
-            },
-          ),
         ],
       ),
     );
@@ -208,12 +166,11 @@ BlocBuilder(
   @override
   void dispose() {
     _textController.dispose();
-    movieBloc.close();
+
     super.dispose();
   }
 
-  Widget _searchBarWidget(MovieSearchBloc movieBloc) {
-    GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  Widget _searchBarWidget() {
     return Container(
       child: Form(
         key: _formKey,
@@ -245,7 +202,6 @@ BlocBuilder(
                         .build(),
                     onSaved: (text) {
                       _movieName = text;
-                      //   movieBloc.add(SearchMovieEvent(movieName: _movieName));
                     },
                     keyboardType: TextInputType.name,
                     textInputAction: TextInputAction.search,
@@ -284,7 +240,8 @@ BlocBuilder(
                   // _searchPressed();
                   if (_formKey.currentState.validate()) {
                     _formKey.currentState.save();
-                    //movieBloc.add(SearchMovieEvent(movieName: _textController.text));
+                 // ignore: close_sinks
+                 MovieSearchBloc movieBloc = BlocProvider.of<MovieSearchBloc>(context);
                     movieBloc.add(SearchMovieEvent(movieName: _movieName));
                   }
                 }),
