@@ -18,16 +18,15 @@ class MainSearchScreen extends StatefulWidget {
 class _MainSearchScreenState extends State<MainSearchScreen> {
   Bloc<MovieEvent, MovieState> movieBloc;
 
-//  static final List<Movie> favoriteMovies = [];
-
   TextEditingController _textController;
-  var _formKey = GlobalKey<FormState>();
-  String _movieName;
-
-  //_SearchScreenState({this.movieBloc});
+//  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  //String _movieName;
+/*  final GlobalKey<FormState> _formKey=
+  new GlobalKey<FormState>(debugLabel: '_loginFormKey');*/
 
   @override
   Widget build(BuildContext context) {
+
     // ignore: close_sinks
     movieBloc = BlocProvider.of<MovieSearchBloc>(context);
     return Scaffold(
@@ -59,141 +58,53 @@ class _MainSearchScreenState extends State<MainSearchScreen> {
           ),
         ],
       ),
-      body: BlocBuilder(
-        cubit: movieBloc,
-        builder: (context, state) {
-          debugPrint("State: $state");
-          if (state is MovieInitialState) {
-            //return Center(child: Text("Initial"));
+      body: Column(
+        children: [
 
-            return _searchBarWidget(movieBloc);
-          }
+           _searchBarWidget(movieBloc),
 
-          if (state is MovieSearchingState) {
-            return Column(
-              children: [
-                _searchBarWidget(movieBloc),
-                Center(
-                  child: CircularProgressIndicator(),
-                )
-              ],
-            );
-          }
-          if (state is MovieSearchErrorState) {
-            print("Error:" + state.errorText);
-            if (state.errorText.toString().contains("null")) {
-              return Container(
-                child: Center(child: Text("Please Enter a Movie Name")),
-              );
-            }
-          }
-          if (state is MovieSearchSuccessState) {
-            List<Movie> movieList = state.movieList;
-            return MovieList(movieList: movieList);
-            //return _buildMovieList(movieList);
-          } else {
-            return _searchBarWidget(movieBloc);
-          }
-        },
+          Expanded(
+            child: BlocBuilder(
+              cubit: movieBloc,
+              builder: (context, state) {
+                debugPrint("State: $state");
+                if (state is MovieInitialState) {
+                  return _searchBarWidget(movieBloc);
+                }
+
+                if (state is MovieSearchingState) {
+                  return Column(
+                    children: [
+                      _searchBarWidget(movieBloc),
+                      Center(
+                        child: CircularProgressIndicator(),
+                      )
+                    ],
+                  );
+                }
+                if (state is MovieSearchErrorState) {
+                  print("Error:" + state.errorText);
+                  if (state.errorText.toString().contains("null")) {
+                    return Container(
+                      child: Center(child: Text("Please Enter a Movie Name")),
+                    );
+                  }
+                }
+                if (state is MovieSearchSuccessState) {
+                  List<Movie> movieList = state.movieList;
+                  //return Container(child: Expanded(child: Column(children: [Container(child: _searchBarWidget(movieBloc)),MovieList(movieList: movieList)],)));
+                  return MovieList(movieList: movieList);
+                } else {
+                  return _searchBarWidget(movieBloc);
+                }
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
 
-  Widget _buildMovieList(List<Movie> movieList) {
-    bool isAddedList = false;
-    return GridView.builder(
-      shrinkWrap: true,
-      itemCount: movieList.length,
-      gridDelegate:
-          SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
-      itemBuilder: (BuildContext context, int index) {
-        return Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Material(
-            borderRadius: BorderRadius.circular(16),
-            //elevation: 1,
-            color: Colors.grey.shade300,
-            child: Container(
-              decoration:
-                  BoxDecoration(borderRadius: BorderRadius.circular(20)),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      isAddedList
-                          ? FlatButton.icon(
-                              onPressed: () {
-                                MainSearchScreen.favoriteMovies
-                                    .remove(movieList[index]);
-                                setState(() {
-                                  isAddedList = !isAddedList;
-                                });
-                              },
-                              icon: Icon(
-                                Icons.favorite,
-                                color: Colors.red,
-                                size: 30,
-                              ),
-                              label: Text("Added to Favorites"),
-                            )
-                          : FlatButton.icon(
-                              onPressed: () {
-                                MainSearchScreen.favoriteMovies
-                                    .add(movieList[index]);
-                                setState(() {
-                                  isAddedList = !isAddedList;
-                                });
-                              },
-                              icon: Icon(
-                                Icons.favorite,
-                                size: 30,
-                              ),
-                              label: Text("Add Favorite"),
-                            ),
-                    ],
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Center(
-                      child: Text(
-                        movieList[index].title,
-                        style: TextStyle(
-                            fontSize: 14, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Center(
-                        child: Text(movieList[index].year,
-                            style: TextStyle(
-                                fontSize: 14, fontWeight: FontWeight.bold))),
-                  ),
-                  Container(
-                    width: 100,
-                    height: 250,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5),
-                        image: DecorationImage(
-                            image: NetworkImage(movieList[index].poster),
-                            fit: BoxFit.fitHeight)),
-                    /*child: Column(
-                        children: [
-                          Text("TYPE:" + movieList[index].type.toString()),
-                          Text("IMDB ID: ${movieList[index].imdbId}"),
-                        ],
-                      ),*/
-                  ),
-                ],
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }
 
   @override
   void dispose() {
@@ -203,6 +114,7 @@ class _MainSearchScreenState extends State<MainSearchScreen> {
   }
 
   Widget _searchBarWidget(MovieSearchBloc movieBloc) {
+     GlobalKey<FormState> _formKey = GlobalKey<FormState>();
     return Container(
       child: Form(
         key: _formKey,
@@ -232,10 +144,10 @@ class _MainSearchScreenState extends State<MainSearchScreen> {
                         .required("Movie name is required.")
                         .minLength(2, "Please enter a movie name")
                         .build(),
-                    onSaved: (text) {
+                /*    onSaved: (text) {
                       _movieName = text;
                       //   movieBloc.add(SearchMovieEvent(movieName: _movieName));
-                    },
+                    },*/
                     keyboardType: TextInputType.name,
                     textInputAction: TextInputAction.search,
                     textCapitalization: TextCapitalization.words,
@@ -273,7 +185,7 @@ class _MainSearchScreenState extends State<MainSearchScreen> {
                   // _searchPressed();
                   if (_formKey.currentState.validate()) {
                     _formKey.currentState.save();
-                    movieBloc.add(SearchMovieEvent(movieName: _movieName));
+                    movieBloc.add(SearchMovieEvent(movieName: _textController.text));
                   }
                 }),
           ],
